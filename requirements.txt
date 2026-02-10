@@ -1,0 +1,18 @@
+# Core ML and data processing
+torch>=2.0.0
+numpy>=1.24.0
+pandas>=2.0.0
+
+# Data fetching
+yfinance>=0.2.0
+
+# Data validation
+pydantic>=2.0.0
+
+# UI framework
+PySide6>=6.5.0
+PySide6-WebEngine>=6.5.0
+
+# Technical indicators
+ta-lib>=0.4.0; platform_system != "Windows"
+pandas-ta>=0.3.14b0

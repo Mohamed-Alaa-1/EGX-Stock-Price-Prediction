@@ -1,0 +1,71 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Virtual Environments
+venv/
+env/
+ENV/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Project-specific data
+data/
+*.pt
+*.pth
+*.pkl
+*.parquet
+*.csv
+
+# Model artifacts and cache
+models/
+cache/
+*.log
+
+# Temporary files
+.specify/.tmp/
+*.tmp
+*.temp
+check_*.txt
+syntax_results.txt
+corruption_check.txt
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Ruff
+.ruff_cache/
+
+# OS
+Thumbs.db
+.DS_Store
+desktop.ini

@@ -1,0 +1,219 @@
+openapi: 3.0.3
+info:
+  title: EGX Price Prediction Local API
+  version: 0.1.0
+  description: |
+    Local-only API contract for a personal-use desktop app.
+    This defines internal endpoints for the UI to orchestrate data fetch, training, and prediction.
+servers:
+  - url: http://127.0.0.1:PORT
+paths:
+  /stocks:
+    get:
+      summary: List available EGX stocks
+      responses:
+        '200':
+          description: Stock list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Stock'
+  /stocks/{symbol}/prices:
+    get:
+      summary: Get historical prices for a stock
+      parameters:
+        - in: path
+          name: symbol
+          required: true
+          schema: { type: string }
+        - in: query
+          name: start
+          required: false
+          schema: { type: string, format: date }
+        - in: query
+          name: end
+          required: false
+          schema: { type: string, format: date }
+        - in: query
+          name: source
+          required: false
+          description: Preferred data source provider
+          schema:
+            type: string
+            enum: [auto, yfinance, tradingview, stooq, csv_import]
+      responses:
+        '200':
+          description: Price series
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PriceSeries'
+  /models:
+    get:
+      summary: List saved models
+      responses:
+        '200':
+          description: Model artifacts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ModelArtifact'
+  /models/train:
+    post:
+      summary: Train and save a model (per-stock or federated)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TrainRequest'
+      responses:
+        '202':
+          description: Training job started
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainJob'
+  /models/train/{jobId}:
+    get:
+      summary: Get training job status
+      parameters:
+        - in: path
+          name: jobId
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Job status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrainJob'
+  /predict:
+    post:
+      summary: Predict next trading-day close
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictRequest'
+      responses:
+        '200':
+          description: Prediction result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastResult'
+components:
+  schemas:
+    Stock:
+      type: object
+      required: [symbol, name, exchange]
+      properties:
+        symbol: { type: string }
+        name: { type: string }
+        exchange: { type: string }
+        status:
+          type: string
+          enum: [active, suspended, delisted, unknown]
+    PriceBar:
+      type: object
+      required: [date, open, high, low, close]
+      properties:
+        date: { type: string, format: date }
+        open: { type: number }
+        high: { type: number }
+        low: { type: number }
+        close: { type: number }
+        volume: { type: number, nullable: true }
+        adjusted_close: { type: number, nullable: true }
+    DataSourceRecord:
+      type: object
+      required: [provider, fetched_at]
+      properties:
+        provider:
+          type: string
+          enum: [yfinance, tradingview, stooq, csv_import, auto]
+        provider_details: { type: object, additionalProperties: true }
+        fetched_at: { type: string, format: date-time }
+        range_start: { type: string, format: date }
+        range_end: { type: string, format: date }
+    PriceSeries:
+      type: object
+      required: [symbol, bars]
+      properties:
+        symbol: { type: string }
+        bars:
+          type: array
+          items: { $ref: '#/components/schemas/PriceBar' }
+        source: { $ref: '#/components/schemas/DataSourceRecord' }
+        last_updated_at: { type: string, format: date-time }
+    ModelArtifact:
+      type: object
+      required: [artifact_id, type, covered_symbols, last_trained_at]
+      properties:
+        artifact_id: { type: string }
+        type: { type: string, enum: [per_stock, federated] }
+        covered_symbols:
+          type: array
+          items: { type: string }
+        created_at: { type: string, format: date-time }
+        last_trained_at: { type: string, format: date-time }
+        model_version: { type: string }
+        hyperparams: { type: object, additionalProperties: true }
+        metrics: { type: object, additionalProperties: true }
+        storage_path: { type: string }
+        data_source: { $ref: '#/components/schemas/DataSourceRecord' }
+    TrainRequest:
+      type: object
+      required: [mode, symbols]
+      properties:
+        mode:
+          type: string
+          enum: [per_stock, federated]
+        symbols:
+          type: array
+          items: { type: string }
+          minItems: 1
+        force_retrain:
+          type: boolean
+          default: false
+        seed:
+          type: integer
+          nullable: true
+    TrainJob:
+      type: object
+      required: [job_id, status]
+      properties:
+        job_id: { type: string }
+        status: { type: string, enum: [queued, running, succeeded, failed] }
+        progress:
+          type: number
+          minimum: 0
+          maximum: 1
+        message: { type: string }
+        result_artifact: { $ref: '#/components/schemas/ModelArtifact' }
+    PredictRequest:
+      type: object
+      required: [symbol, model_choice]
+      properties:
+        symbol: { type: string }
+        model_choice: { type: string, enum: [per_stock, federated] }
+        seed: { type: integer, nullable: true }
+    ForecastResult:
+      type: object
+      required: [symbol, target_date, predicted_close, baseline_close, expected_pct_change, momentum_label, latest_data_date]
+      properties:
+        symbol: { type: string }
+        target_date: { type: string, format: date }
+        predicted_close: { type: number }
+        baseline_close: { type: number }
+        expected_pct_change: { type: number }
+        momentum_label: { type: string, enum: [bullish, bearish, neutral] }
+        latest_data_date: { type: string, format: date }
+        model_artifact_id: { type: string }

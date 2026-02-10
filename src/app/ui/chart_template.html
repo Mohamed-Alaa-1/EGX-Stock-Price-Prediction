@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stock Chart</title>
+    <script src="plotly.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #ffffff;
+        }
+        #chart {
+            width: 100%;
+            height: 100vh;
+        }
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            font-size: 18px;
+        }
+        .error-msg {
+            color: #ff6666;
+        }
+    </style>
+</head>
+<body>
+    <div id="chart" class="loading">Loading chart...</div>
+    
+    <script>
+        // Qt WebChannel bridge will be available
+        let currentData = null;
+        let indicatorStates = {
+            rsi: false,
+            macd: false,
+            ema: false,
+            support_resistance: false
+        };
+        
+        // Initialize chart with default config
+        const layout = {
+            title: 'Stock Price',
+            xaxis: { 
+                title: 'Date',
+                type: 'date',
+                rangeslider: { visible: false }
+            },
+            yaxis: { 
+                title: 'Price (EGP)',
+                side: 'right'
+            },
+            yaxis2: {
+                title: 'RSI',
+                overlaying: 'y',
+                side: 'left',
+                position: 0,
+                visible: false
+            },
+            yaxis3: {
+                title: 'MACD',
+                overlaying: 'y',
+                side: 'left',
+                position: 0.05,
+                visible: false
+            },
+            template: 'plotly_dark',
+            hovermode: 'x unified',
+            showlegend: true,
+            legend: {
+                orientation: 'h',
+                y: 1.1
+            }
+        };
+        
+        const config = {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: ['lasso2d', 'select2d']
+        };
+        
+        function updateChart(data) {
+            if (typeof Plotly === 'undefined') {
+                document.getElementById('chart').innerHTML = 
+                    '<div class="loading error-msg">Plotly library failed to load.<br>Check your internet connection.</div>';
+                return;
+            }
+            currentData = data;
+            
+            const traces = [];
+            
+            // Candlestick trace
+            traces.push({
+                type: 'candlestick',
+                x: data.dates,
+                open: data.open,
+                high: data.high,
+                low: data.low,
+                close: data.close,
+                name: data.symbol,
+                increasing: { line: { color: '#00ff00' } },
+                decreasing: { line: { color: '#ff0000' } },
+                yaxis: 'y'
+            });
+            
+            // EMA trace (if enabled)
+            if (indicatorStates.ema && data.ema) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.dates,
+                    y: data.ema,
+                    name: 'EMA',
+                    line: { color: '#ffaa00', width: 1 },
+                    yaxis: 'y'
+                });
+            }
+            
+            // Support/Resistance lines (if enabled)
+            if (indicatorStates.support_resistance && data.sr_levels) {
+                data.sr_levels.forEach((level, idx) => {
+                    const color = level.type === 'support' ? '#00aaff' : '#ff00aa';
+                    traces.push({
+                        type: 'scatter',
+                        x: [data.dates[0], data.dates[data.dates.length - 1]],
+                        y: [level.price, level.price],
+                        name: `${level.type} ${level.price.toFixed(2)}`,
+                        line: { 
+                            color: color,
+                            dash: 'dash',
+                            width: 1
+                        },
+                        mode: 'lines',
+                        yaxis: 'y',
+                        showlegend: false
+                    });
+                });
+            }
+            
+            // RSI trace (if enabled)
+            if (indicatorStates.rsi && data.rsi) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.dates,
+                    y: data.rsi,
+                    name: 'RSI',
+                    line: { color: '#00ff00', width: 1 },
+                    yaxis: 'y2'
+                });
+                
+                // Overbought/oversold lines
+                traces.push({
+                    type: 'scatter',
+                    x: [data.dates[0], data.dates[data.dates.length - 1]],
+                    y: [70, 70],
+                    line: { color: 'red', dash: 'dash', width: 1 },
+                    mode: 'lines',
+                    yaxis: 'y2',
+                    showlegend: false
+                });
+                traces.push({
+                    type: 'scatter',
+                    x: [data.dates[0], data.dates[data.dates.length - 1]],
+                    y: [30, 30],
+                    line: { color: 'green', dash: 'dash', width: 1 },
+                    mode: 'lines',
+                    yaxis: 'y2',
+                    showlegend: false
+                });
+            }
+            
+            // MACD traces (if enabled)
+            if (indicatorStates.macd && data.macd) {
+                traces.push({
+                    type: 'scatter',
+                    x: data.dates,
+                    y: data.macd.macd,
+                    name: 'MACD',
+                    line: { color: '#00ffff', width: 1 },
+                    yaxis: 'y3'
+                });
+                traces.push({
+                    type: 'scatter',
+                    x: data.dates,
+                    y: data.macd.signal,
+                    name: 'Signal',
+                    line: { color: '#ff00ff', width: 1 },
+                    yaxis: 'y3'
+                });
+                traces.push({
+                    type: 'bar',
+                    x: data.dates,
+                    y: data.macd.histogram,
+                    name: 'Histogram',
+                    marker: { color: '#555555' },
+                    yaxis: 'y3'
+                });
+            }
+            
+            // Update layout for visible indicators
+            const newLayout = {...layout};
+            newLayout.title = `${data.symbol} - Stock Price`;
+            newLayout.yaxis2.visible = indicatorStates.rsi;
+            newLayout.yaxis3.visible = indicatorStates.macd;
+            
+            Plotly.react('chart', traces, newLayout, config);
+        }
+        
+        function toggleIndicator(indicator) {
+            indicatorStates[indicator] = !indicatorStates[indicator];
+            if (currentData) {
+                updateChart(currentData);
+            }
+        }
+        
+        // Expose functions to Qt bridge
+        window.updateChart = updateChart;
+        window.toggleIndicator = toggleIndicator;
+    </script>
+</body>
+</html>
