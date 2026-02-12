@@ -39,8 +39,6 @@ Add local-first quant modules to the EGX prediction app: per-ticker risk + signa
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
 Derived from [.specify/memory/constitution.md](../../.specify/memory/constitution.md):
 
 1) **Local-first / personal-use only**

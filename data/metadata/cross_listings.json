@@ -1,0 +1,27 @@
+{
+  "_schema": "cross_listings.v1",
+  "_description": "Maps EGX-listed locals to their GDR/ADR equivalents. ratio_local_per_gdr = how many local shares per 1 GDR.",
+  "mappings": [
+    {
+      "local_symbol": "COMI",
+      "gdr_symbol": "COMI.L",
+      "fx_pair": "USDEGP",
+      "ratio_local_per_gdr": 1.0,
+      "notes": "Commercial International Bank — London GDR"
+    },
+    {
+      "local_symbol": "HRHO",
+      "gdr_symbol": "HRHO.L",
+      "fx_pair": "USDEGP",
+      "ratio_local_per_gdr": 0.5,
+      "notes": "Eastern Company — London GDR (placeholder ratio)"
+    },
+    {
+      "local_symbol": "ETEL",
+      "gdr_symbol": "ETEL.L",
+      "fx_pair": "USDEGP",
+      "ratio_local_per_gdr": 1.0,
+      "notes": "Telecom Egypt — London GDR (placeholder ratio)"
+    }
+  ]
+}

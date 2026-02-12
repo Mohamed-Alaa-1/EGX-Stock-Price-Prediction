@@ -2,8 +2,9 @@
 Web bridge for chart communication.
 """
 
-from PySide6.QtCore import QObject, Signal
 import json
+
+from PySide6.QtCore import QObject, Signal
 
 
 class ChartBridge(QObject):
@@ -60,4 +61,20 @@ class ChartBridge(QObject):
         json_data = json.dumps(data, default=str)
         js_code = f"window.updateChart({json_data});"
         print(f"[ChartBridge] runJavaScript(updateChart) for {data.get('symbol', '?')}")
+        self._page.runJavaScript(js_code)
+
+    def update_premium_discount(self, page, data: dict):
+        """
+        Send premium/discount time series to the chart.
+
+        Expected data: {dates: [...], values: [...], label: str}
+        If window.updatePremiumDiscount is defined the chart will
+        add/replace an overlay subplot.
+        """
+        self._page = page
+        if not self._ready:
+            print("[ChartBridge] Page not ready, ignoring premium/discount update")
+            return
+        json_data = json.dumps(data, default=str)
+        js_code = f"if(window.updatePremiumDiscount) window.updatePremiumDiscount({json_data});"
         self._page.runJavaScript(js_code)

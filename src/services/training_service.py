@@ -3,19 +3,19 @@ Training orchestration service.
 """
 
 from datetime import datetime
-from typing import Optional
 
-from core.schemas import ModelArtifact, ModelType, DataSourceRecord, PriceSeries
-from core.config import Config
-from ml.config import TrainingConfig
-from ml.train import train_per_stock_model
-from ml.federated_train import train_federated_model
-from ml.persistence import save_model
-from ml.baselines import get_baseline
-from ml.metrics import calculate_metrics, compare_to_baseline
-from services.model_registry import get_registry
-from services.artifact_paths import generate_artifact_id
 import numpy as np
+
+from core.schemas import ModelArtifact, ModelType, PriceSeries
+from ml.baselines import get_baseline
+from ml.config import TrainingConfig
+from ml.federated_train import train_federated_model
+from ml.metrics import compare_to_baseline
+from ml.persistence import save_model
+from ml.train import train_per_stock_model
+from services.artifact_paths import generate_artifact_id
+from services.model_registry import get_registry
+from services.signal_validation_service import SignalValidationService
 
 
 class TrainingService:
@@ -25,8 +25,8 @@ class TrainingService:
     def train_per_stock(
         symbol: str,
         series: PriceSeries,
-        config: Optional[TrainingConfig] = None,
-        progress_callback: Optional[callable] = None,
+        config: TrainingConfig | None = None,
+        progress_callback: callable | None = None,
     ) -> ModelArtifact:
         """
         Train a per-stock model.
@@ -45,6 +45,21 @@ class TrainingService:
         """
         config = config or TrainingConfig.get_default()
 
+        # Statistical validation BEFORE training (constitution mandate)
+        validation_result = None
+        validation_warnings = []
+        try:
+            validation_result = SignalValidationService.validate(series)
+            validation_warnings = validation_result.warnings
+            if validation_warnings:
+                print(
+                    f"[TrainingService] Signal validation warnings"
+                    f" for {symbol}: {validation_warnings}"
+                )
+        except Exception as e:
+            print(f"[TrainingService] Signal validation failed for {symbol}: {e}")
+            validation_warnings = [f"Signal validation failed: {e}"]
+
         # Train model
         result = train_per_stock_model(series, config, progress_callback)
 
@@ -60,7 +75,10 @@ class TrainingService:
         # Calculate baseline metrics
         baseline_pred = get_baseline(series, method="naive")
         last_close = series.get_latest_close()
-        baseline_metrics = {"mae": abs(last_close - baseline_pred), "rmse": abs(last_close - baseline_pred)}
+        baseline_metrics = {
+            "mae": abs(last_close - baseline_pred),
+            "rmse": abs(last_close - baseline_pred),
+        }
 
         # Compare to baseline
         improvements = compare_to_baseline(result.val_metrics, baseline_metrics)
@@ -73,6 +91,11 @@ class TrainingService:
             **improvements,
         }
 
+        # Build hyperparams with validation results persisted
+        hyperparams = config.model_dump()
+        if validation_result:
+            hyperparams["signal_validation"] = validation_result.model_dump(mode="json")
+
         # Create artifact
         artifact = ModelArtifact(
             artifact_id=artifact_id,
@@ -84,7 +107,7 @@ class TrainingService:
             training_window_start=min(bar.date for bar in series.bars),
             training_window_end=max(bar.date for bar in series.bars),
             model_version="lstm_v1",
-            hyperparams=config.model_dump(),
+            hyperparams=hyperparams,
             metrics=metrics,
             storage_path=str(weights_path),
         )
@@ -99,8 +122,8 @@ class TrainingService:
     def train_federated(
         symbols: list[str],
         series_by_symbol: dict[str, PriceSeries],
-        config: Optional[TrainingConfig] = None,
-        progress_callback: Optional[callable] = None,
+        config: TrainingConfig | None = None,
+        progress_callback: callable | None = None,
     ) -> ModelArtifact:
         """
         Train a federated model.
@@ -115,6 +138,18 @@ class TrainingService:
             Created ModelArtifact
         """
         config = config or TrainingConfig.get_default()
+
+        # Statistical validation BEFORE training for each symbol (constitution mandate)
+        validation_results = {}
+        for sym, sym_series in series_by_symbol.items():
+            try:
+                val = SignalValidationService.validate(sym_series)
+                validation_results[sym] = val.model_dump(mode="json")
+                if val.warnings:
+                    print(f"[TrainingService] Signal validation warnings for {sym}: {val.warnings}")
+            except Exception as e:
+                print(f"[TrainingService] Signal validation failed for {sym}: {e}")
+                validation_results[sym] = {"error": str(e)}
 
         # Train federated model
         result = train_federated_model(series_by_symbol, config, progress_callback)
@@ -157,7 +192,7 @@ class TrainingService:
                 for series in series_by_symbol.values()
             ),
             model_version="lstm_v1_federated",
-            hyperparams=config.model_dump(),
+            hyperparams={**config.model_dump(), "signal_validation": validation_results},
             metrics=avg_metrics,
             storage_path=str(weights_path),
         )

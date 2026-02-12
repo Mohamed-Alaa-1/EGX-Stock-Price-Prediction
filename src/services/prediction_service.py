@@ -18,6 +18,8 @@ from ml.inference import InferenceEngine
 from ml.baselines import get_baseline
 from services.model_registry import get_registry
 from services.model_staleness import is_model_stale
+from services.risk_service import RiskService
+from services.signal_validation_service import SignalValidationService
 from data.providers.registry import get_provider_registry
 from data.cache_store import CacheStore
 
@@ -64,13 +66,17 @@ class PredictionService:
 
         # Generate prediction based on method
         if method == ForecastMethod.ML:
-            return self._predict_ml(symbol, series, target_date)
+            result = self._predict_ml(symbol, series, target_date)
         elif method == ForecastMethod.NAIVE:
-            return self._predict_naive(symbol, series, target_date)
+            result = self._predict_naive(symbol, series, target_date)
         elif method == ForecastMethod.SMA:
-            return self._predict_sma(symbol, series, target_date)
+            result = self._predict_sma(symbol, series, target_date)
         else:
             raise ValueError(f"Unknown forecast method: {method}")
+
+        # Enrich with risk companion + baseline (constitution mandate)
+        result = self._enrich_with_risk_and_baseline(result, series)
+        return result
 
     def _get_series(self, symbol: str) -> PriceSeries:
         """Fetch historical price data."""
@@ -179,3 +185,40 @@ class PredictionService:
         """Check if ML model exists for symbol."""
         artifact = self.registry.get_latest_for_symbol(symbol)
         return artifact is not None
+
+    def _enrich_with_risk_and_baseline(
+        self,
+        result: ForecastResult,
+        series: PriceSeries,
+    ) -> ForecastResult:
+        """
+        Attach risk companion (VaR+Sharpe), validation (ADF+Hurst),
+        and baseline ("naive: last close") to the forecast result.
+
+        Constitution mandates:
+        - Risk companion on every prediction (VaR 95/99 + assumptions)
+        - Baseline (naive last close) alongside model prediction
+        """
+        try:
+            risk = RiskService.compute(series)
+            result.model_features["risk"] = risk.model_dump()
+        except Exception as e:
+            result.model_features["risk"] = {"error": str(e)}
+
+        try:
+            validation = SignalValidationService.validate(series)
+            result.model_features["validation"] = validation.model_dump()
+        except Exception as e:
+            result.model_features["validation"] = {"error": str(e)}
+
+        # Baseline (naive: last close) — constitution requirement
+        try:
+            baseline_close = get_baseline(series, method="naive")
+            result.model_features["baseline"] = {
+                "method": "naive (last close)",
+                "predicted_close": baseline_close,
+            }
+        except Exception as e:
+            result.model_features["baseline"] = {"error": str(e)}
+
+        return result

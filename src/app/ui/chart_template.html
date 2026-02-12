@@ -219,6 +219,44 @@
         // Expose functions to Qt bridge
         window.updateChart = updateChart;
         window.toggleIndicator = toggleIndicator;
+
+        // Premium/discount overlay (GDR US3)
+        window.updatePremiumDiscount = function(data) {
+            if (!data || !data.dates || !data.values) return;
+            const chartDiv = document.getElementById('chart');
+            if (!chartDiv || !chartDiv.data) return;
+
+            // Remove any previous premium/discount trace
+            const traceIdx = chartDiv.data.findIndex(t => t.name === 'Premium/Discount');
+            if (traceIdx >= 0) {
+                Plotly.deleteTraces('chart', traceIdx);
+            }
+
+            // Add a new trace on yaxis4 (separate overlay)
+            const trace = {
+                type: 'scatter',
+                x: data.dates,
+                y: data.values,
+                name: data.label || 'Premium/Discount',
+                line: { color: '#ffd700', width: 1.5 },
+                yaxis: 'y4',
+                mode: 'lines'
+            };
+
+            Plotly.addTraces('chart', trace);
+
+            // Ensure yaxis4 is visible
+            Plotly.relayout('chart', {
+                yaxis4: {
+                    title: 'Premium/Discount (%)',
+                    overlaying: 'y',
+                    side: 'left',
+                    position: 0.1,
+                    visible: true,
+                    showgrid: false
+                }
+            });
+        };
     </script>
 </body>
 </html>

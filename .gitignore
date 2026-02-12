@@ -27,7 +27,11 @@ ENV/
 .DS_Store
 
 # Project-specific data
-data/
+data/*
+!data/metadata/
+data/metadata/*
+!data/metadata/cross_listings.json
+!data/metadata/model_registry.json
 *.pt
 *.pth
 *.pkl

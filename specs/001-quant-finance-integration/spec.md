@@ -97,6 +97,8 @@ As a user analyzing cross-listed EGX stocks, I want to see the GDR premium/disco
 - **FR-002**: System MUST display the VaR assumptions used (methodology label, lookback window, and confidence level).
 - **FR-003**: System MUST compute and display a historical Sharpe ratio for the selected ticker using a clearly stated lookback window and return convention.
 
+- **FR-017**: System MUST display a baseline prediction (e.g., "naive: last close") alongside the model prediction for every prediction run.
+
 - **FR-004**: Before training or retraining a model for a ticker, the system MUST compute and record ADF stationarity test outputs (including the test target and p-value) for the time series being modeled.
 - **FR-005**: Before training or retraining a model for a ticker, the system MUST compute and record a Hurst exponent estimate and a regime classification (trending / random-like / mean-reverting).
 - **FR-006**: If statistical validation indicates weak/unsuitable signal for the chosen modeling assumption, the system MUST flag this clearly in the user-facing output and must not present the prediction as high-confidence.

@@ -37,6 +37,38 @@ class Config:
     DEFAULT_PROVIDER = "yfinance"
     FALLBACK_PROVIDER = "csv_import"
 
+    # ---------- Quant finance defaults (T006) ----------
+
+    # Risk metrics
+    DEFAULT_RISK_LOOKBACK_DAYS = 252  # ~1 year of trading days
+    MIN_OBSERVATIONS_RISK = 60  # minimum bars needed for VaR/Sharpe
+    DEFAULT_VAR_METHOD = "historical"
+    DEFAULT_RISK_FREE_RATE = 0.0  # labeled as 0 by default
+    DEFAULT_RETURN_TYPE = "simple"
+
+    # Statistical validation
+    DEFAULT_VALIDATION_LOOKBACK_DAYS = 252
+    MIN_OBSERVATIONS_VALIDATION = 100  # minimum bars for ADF/Hurst
+    ADF_SIGNIFICANCE_LEVEL = 0.05
+    HURST_TRENDING_THRESHOLD = 0.6  # H > 0.6 → trending
+    HURST_MEAN_REVERTING_THRESHOLD = 0.4  # H < 0.4 → mean-reverting
+
+    # Backtesting
+    DEFAULT_BACKTEST_LOOKBACK_YEARS = 5
+    DEFAULT_COMMISSION_BPS = 15.0  # EGX typical commission
+    DEFAULT_STAMP_DUTY_BPS = 5.0  # EGX stamp duty
+    DEFAULT_SLIPPAGE_BPS = 0.0
+
+    # Portfolio optimization
+    DEFAULT_PORTFOLIO_LOOKBACK_DAYS = 252
+    MIN_OVERLAP_DAYS = 126  # minimum overlapping trading days for covariance
+    DEFAULT_SHRINKAGE_ALPHA = 0.1
+    DEFAULT_DIAGONAL_LOADING_LAMBDA = 0.0
+    MAX_FRONTIER_POINTS = 20
+
+    # Cross-listings / GDR
+    CROSS_LISTINGS_PATH = METADATA_DIR / "cross_listings.json"
+
     @classmethod
     def ensure_directories(cls) -> None:
         """Create all required directories if they don't exist."""
