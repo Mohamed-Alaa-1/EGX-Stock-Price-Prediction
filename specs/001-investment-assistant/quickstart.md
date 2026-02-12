@@ -40,3 +40,17 @@ The app includes a Performance Review view that summarizes outcomes over your **
 - [research.md](research.md): Phase 0 decisions
 - [data-model.md](data-model.md): entities and lifecycle
 - [contracts/local-api.yaml](contracts/local-api.yaml): internal service contract
+
+## Implementation
+
+All 44 tasks are implemented (T001–T044). Key modules:
+
+| Module | Purpose |
+|--------|---------|
+| `src/services/strategy_engine.py` | Ensemble scoring → BUY/SELL/HOLD |
+| `src/services/trade_journal_store.py` | SQLite-backed journal persistence |
+| `src/services/portfolio_tracker.py` | High-level entry/exit logging |
+| `src/app/ui/prediction_tab.py` | Strategy Dashboard with recommendation panel |
+| `src/app/ui/performance_tab.py` | Read-only performance review |
+
+Tests: 83 total (14 strategy engine + 10 journal store + 9 portfolio tracker + 4 quant aliases + existing suite).

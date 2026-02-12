@@ -13,22 +13,28 @@ from PySide6.QtWidgets import (
     QMessageBox,
     QPushButton,
     QRadioButton,
-    QSplitter,
+    QScrollArea,
     QTextEdit,
     QVBoxLayout,
     QWidget,
 )
 
-from app.ui.chart_panel import ChartPanel
 from app.ui.stock_selector import StockSelectorWidget
 from core.momentum import calculate_momentum, get_momentum_signal
-from core.schemas import BacktestStrategy, ForecastMethod, ForecastResult
+from core.schemas import (
+    BacktestStrategy,
+    ForecastMethod,
+    ForecastResult,
+    StrategyAction,
+    StrategyRecommendation,
+)
 from services.backtest_service import BacktestService
 from services.gdr_bridge_service import GdrBridgeService, list_mapped_symbols
 from services.model_registry import get_registry
 from services.model_staleness import get_staleness_message
+from services.portfolio_tracker import PortfolioTracker
 from services.prediction_service import PredictionService
-from services.price_service import PriceService
+from services.strategy_engine import StrategyEngine
 
 
 class PredictionWorker(QThread):
@@ -59,23 +65,25 @@ class PredictionWorker(QThread):
 
 
 class PredictionTab(QWidget):
-    """Prediction tab widget."""
+    """Strategy Dashboard tab (formerly Prediction tab)."""
+
+    # Emitted when the user selects a stock so the Chart tab can react
+    stock_selected = Signal(str)
 
     def __init__(self):
         super().__init__()
         self.worker = None
+        self._strategy_engine = StrategyEngine()
+        self._portfolio_tracker = PortfolioTracker()
+        self._last_recommendation: StrategyRecommendation | None = None
         self._init_ui()
 
     def _init_ui(self):
-        """Initialize UI."""
-        # Main splitter for chart and controls
-        splitter = QSplitter(Qt.Horizontal)
+        """Initialize UI — single-column scrollable layout (chart is in its own tab)."""
+        # Scrollable content area so everything fits
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
 
-        # Left side: Chart
-        self.chart_panel = ChartPanel()
-        splitter.addWidget(self.chart_panel)
-
-        # Right side: Controls
         controls_widget = QWidget()
         controls_layout = QVBoxLayout()
 
@@ -127,6 +135,53 @@ class PredictionTab(QWidget):
 
         results_group.setLayout(results_layout)
         controls_layout.addWidget(results_group)
+
+        # ── Assistant Recommendation (T026-T028) ──────────────────────
+        rec_group = QGroupBox("Assistant Recommendation")
+        rec_layout = QVBoxLayout()
+
+        self.rec_banner = QLabel("Run a prediction to see recommendation")
+        self.rec_banner.setAlignment(Qt.AlignCenter)
+        self.rec_banner.setStyleSheet(
+            "font-size: 16px; font-weight: bold; padding: 8px; "
+            "background-color: #555; color: white; border-radius: 4px;"
+        )
+        rec_layout.addWidget(self.rec_banner)
+
+        self.rec_conviction = QLabel("")
+        self.rec_conviction.setStyleSheet("font-size: 13px; padding: 4px;")
+        rec_layout.addWidget(self.rec_conviction)
+
+        self.rec_levels = QLabel("")
+        self.rec_levels.setWordWrap(True)
+        self.rec_levels.setStyleSheet("font-size: 12px; padding: 4px;")
+        rec_layout.addWidget(self.rec_levels)
+
+        self.rec_evidence = QTextEdit()
+        self.rec_evidence.setReadOnly(True)
+        self.rec_evidence.setMaximumHeight(120)
+        self.rec_evidence.setPlaceholderText("Evidence signals will appear here")
+        rec_layout.addWidget(self.rec_evidence)
+
+        rec_group.setLayout(rec_layout)
+        controls_layout.addWidget(rec_group)
+
+        # ── Trade Journal (T036) ──────────────────────────────────────
+        journal_group = QGroupBox("Trade Journal")
+        journal_layout = QHBoxLayout()
+
+        self.entry_button = QPushButton("Execute Entry")
+        self.entry_button.setEnabled(False)
+        self.entry_button.clicked.connect(self._on_execute_entry)
+        journal_layout.addWidget(self.entry_button)
+
+        self.exit_button = QPushButton("Log Exit")
+        self.exit_button.setEnabled(False)
+        self.exit_button.clicked.connect(self._on_log_exit)
+        journal_layout.addWidget(self.exit_button)
+
+        journal_group.setLayout(journal_layout)
+        controls_layout.addWidget(journal_group)
 
         # Momentum display
         momentum_group = QGroupBox("Technical Indicators")
@@ -184,39 +239,20 @@ class PredictionTab(QWidget):
 
         controls_layout.addStretch()
         controls_widget.setLayout(controls_layout)
-        splitter.addWidget(controls_widget)
-
-        # Set splitter proportions (70% chart, 30% controls)
-        splitter.setStretchFactor(0, 7)
-        splitter.setStretchFactor(1, 3)
+        scroll.setWidget(controls_widget)
 
         # Main layout
         main_layout = QVBoxLayout()
-        main_layout.addWidget(splitter)
+        main_layout.addWidget(scroll)
         self.setLayout(main_layout)
 
         # Connect stock selection to chart loading
         self.stock_selector.selection_changed.connect(self._on_stock_selected)
 
     def _on_stock_selected(self, symbol: str):
-        """Load chart data when stock is selected."""
+        """Notify the Chart tab when a stock is selected."""
         print(f"[PredictionTab] Stock selected: {symbol}")
-        try:
-            self.chart_panel.set_symbol(symbol)
-            interval = self.chart_panel.get_interval()
-            price_service = PriceService()
-            series = price_service.get_series(symbol, interval=interval)
-            print(
-                f"[PredictionTab] Loading chart for {symbol}"
-                f" ({len(series.bars)} bars, interval={interval})"
-            )
-            self.chart_panel.load_series(series)
-            print(f"[PredictionTab] Chart loaded successfully for {symbol}")
-        except Exception as e:
-            print(f"[PredictionTab] ERROR loading chart: {e}")
-            import traceback
-            traceback.print_exc()
-            QMessageBox.warning(self, "Chart Error", f"Failed to load chart data:\n{e}")
+        self.stock_selected.emit(symbol)
 
     def _on_predict(self):
         """Handle predict button click."""
@@ -373,6 +409,34 @@ class PredictionTab(QWidget):
         except Exception as e:
             self.momentum_label.setText(f"Error: {e}")
 
+        # ── Strategy recommendation (T029) ────────────────────────────
+        try:
+            service = PredictionService()
+            series = service._get_series(symbol)
+            risk_snap = result.model_features.get("risk_snapshot")
+            validation_snap = result.model_features.get("validation_snapshot")
+            rec = self._strategy_engine.compute_recommendation(
+                series=series,
+                forecast=result,
+                risk_snapshot=risk_snap,
+                validation_result=validation_snap,
+            )
+            self._last_recommendation = rec
+            self._update_recommendation_ui(rec)
+        except Exception as exc:
+            print(f"[PredictionTab] Strategy engine error: {exc}")
+            self.rec_banner.setText("Recommendation unavailable")
+            self.rec_banner.setStyleSheet(
+                "font-size: 16px; font-weight: bold; padding: 8px; "
+                "background-color: #555; color: white; border-radius: 4px;"
+            )
+            self.rec_conviction.setText("")
+            self.rec_levels.setText("")
+            self.rec_evidence.clear()
+            self._last_recommendation = None
+            self.entry_button.setEnabled(False)
+            self.exit_button.setEnabled(False)
+
     def _on_run_backtest(self):
         """Handle backtest button click."""
         selected = self.stock_selector.get_selected_symbols()
@@ -468,8 +532,9 @@ class PredictionTab(QWidget):
                     )
                 self.gdr_status_label.setText(status)
 
-                # Overlay on chart
-                self.chart_panel.load_premium_discount(result)
+                # Overlay on chart (if chart tab is linked)
+                if hasattr(self, "_chart_tab") and self._chart_tab is not None:
+                    self._chart_tab.load_premium_discount(result)
             else:
                 self.gdr_status_label.setText("No data points computed")
 
@@ -479,6 +544,134 @@ class PredictionTab(QWidget):
             )
 
         self.gdr_button.setEnabled(True)
+
+    # ------------------------------------------------------------------
+    # Recommendation UI helpers (T027, T028)
+    # ------------------------------------------------------------------
+
+    _ACTION_STYLES: dict[StrategyAction, str] = {
+        StrategyAction.BUY: "background-color: #2e7d32; color: white;",
+        StrategyAction.SELL: "background-color: #c62828; color: white;",
+        StrategyAction.HOLD: "background-color: #f9a825; color: black;",
+    }
+
+    def _update_recommendation_ui(self, rec: StrategyRecommendation) -> None:
+        """Populate the recommendation panel from a StrategyRecommendation."""
+        # Banner – colour-coded per action (T027)
+        style_body = self._ACTION_STYLES.get(
+            rec.action, "background-color: #555; color: white;"
+        )
+        self.rec_banner.setText(f"{rec.action.value}  —  {rec.symbol}")
+        self.rec_banner.setStyleSheet(
+            f"font-size: 16px; font-weight: bold; padding: 8px; "
+            f"border-radius: 4px; {style_body}"
+        )
+
+        # Conviction
+        self.rec_conviction.setText(f"Conviction: {rec.conviction}%")
+
+        # Entry zone / stop / target
+        parts: list[str] = []
+        if rec.entry_zone_lower is not None and rec.entry_zone_upper is not None:
+            parts.append(
+                f"Entry zone: {rec.entry_zone_lower:.2f} – {rec.entry_zone_upper:.2f}"
+            )
+        if rec.stop_loss is not None:
+            parts.append(f"Stop-loss: {rec.stop_loss:.2f}")
+        if rec.target_exit is not None:
+            parts.append(f"Target: {rec.target_exit:.2f}")
+        if rec.risk_distance_pct is not None:
+            parts.append(f"Risk distance: {rec.risk_distance_pct:.1f}%")
+        self.rec_levels.setText("  |  ".join(parts) if parts else "")
+
+        # Evidence panel (T028)
+        evidence_html = "<b>Evidence</b><br/>"
+        for sig in rec.evidence_bullish:
+            evidence_html += (
+                f"<span style='color: #2e7d32;'>▲ {sig.source.value}</span> "
+                f"({sig.weight:.0%}): {sig.summary}<br/>"
+            )
+        for sig in rec.evidence_bearish:
+            evidence_html += (
+                f"<span style='color: #c62828;'>▼ {sig.source.value}</span> "
+                f"({sig.weight:.0%}): {sig.summary}<br/>"
+            )
+        for sig in rec.evidence_neutral:
+            evidence_html += (
+                f"<span style='color: #888;'>● {sig.source.value}</span> "
+                f"({sig.weight:.0%}): {sig.summary}<br/>"
+            )
+        if rec.logic_summary:
+            evidence_html += f"<br/><i>{rec.logic_summary}</i>"
+        self.rec_evidence.setHtml(evidence_html)
+
+        # Enable journal buttons
+        self.entry_button.setEnabled(True)
+        self.exit_button.setEnabled(True)
+
+    # ------------------------------------------------------------------
+    # Trade journal handlers (T036)
+    # ------------------------------------------------------------------
+
+    def _on_execute_entry(self) -> None:
+        """Log a simulated trade entry via PortfolioTracker."""
+        selected = self.stock_selector.get_selected_symbols()
+        if not selected or self._last_recommendation is None:
+            return
+
+        symbol = selected[0]
+        rec = self._last_recommendation
+        price = rec.entry_zone_upper if rec.entry_zone_upper else rec.stop_loss
+        if price is None:
+            QMessageBox.warning(
+                self, "No Price", "Cannot determine entry price from recommendation."
+            )
+            return
+
+        try:
+            self._portfolio_tracker.log_entry(
+                symbol=symbol,
+                side="long" if rec.action == StrategyAction.BUY else "short",
+                price=price,
+                recommendation=rec,
+            )
+            QMessageBox.information(
+                self,
+                "Entry Logged",
+                f"Simulated {symbol} entry logged at {price:.2f}",
+            )
+        except Exception as exc:
+            QMessageBox.warning(self, "Journal Error", str(exc))
+
+    def _on_log_exit(self) -> None:
+        """Log a simulated trade exit via PortfolioTracker."""
+        selected = self.stock_selector.get_selected_symbols()
+        if not selected:
+            return
+
+        symbol = selected[0]
+        rec = self._last_recommendation
+        price = rec.target_exit if rec and rec.target_exit else None
+        if price is None:
+            QMessageBox.warning(
+                self, "No Price", "Cannot determine exit price from recommendation."
+            )
+            return
+
+        try:
+            self._portfolio_tracker.log_exit(
+                symbol=symbol,
+                side="long",
+                price=price,
+                notes="Exited via Strategy Dashboard",
+            )
+            QMessageBox.information(
+                self,
+                "Exit Logged",
+                f"Simulated {symbol} exit logged at {price:.2f}",
+            )
+        except Exception as exc:
+            QMessageBox.warning(self, "Journal Error", str(exc))
 
     def _on_prediction_error(self, error: str):
         """Handle prediction error."""

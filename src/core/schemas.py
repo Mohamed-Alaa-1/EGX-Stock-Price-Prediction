@@ -341,3 +341,101 @@ class GdrPremiumDiscountSeries(BaseModel):
     points: list[GdrPremiumDiscountPoint] = Field(default_factory=list)
     definition: str = "(local_close - gdr_close_fx_adjusted * ratio) / gdr_close_fx_adjusted * 100"
     warnings: list[str] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Investment-assistant schemas (001-investment-assistant / T007)
+# ---------------------------------------------------------------------------
+
+
+class StrategyAction(str, Enum):
+    """Recommendation action."""
+    BUY = "buy"
+    SELL = "sell"
+    HOLD = "hold"
+
+
+class EvidenceSource(str, Enum):
+    """Signal source feeding the strategy engine."""
+    ML_FORECAST = "ml_forecast"
+    RSI = "rsi"
+    MACD = "macd"
+    EMA = "ema"
+    VAR = "var"
+    HURST = "hurst"
+    ADF = "adf"
+
+
+class EvidenceDirection(str, Enum):
+    """Directional classification for a single signal."""
+    BULLISH = "bullish"
+    BEARISH = "bearish"
+    NEUTRAL = "neutral"
+
+
+class EvidenceSignal(BaseModel):
+    """One explainable contribution to a recommendation."""
+    source: EvidenceSource
+    direction: EvidenceDirection
+    weight: float = Field(..., description="Blending weight for the source-group (disclosed)")
+    score: float = Field(..., ge=-1.0, le=1.0, description="Normalized signal in [-1, +1]")
+    summary: str = Field(..., description="Short reason shown in UI")
+    raw_value: Optional[Any] = Field(default=None, description="Optional raw metric (e.g. RSI=72)")
+
+
+class StrategyRecommendation(BaseModel):
+    """Assistant-produced strategy guidance for a symbol at a point in time."""
+    symbol: str
+    as_of_date: date
+    action: StrategyAction
+    conviction: int = Field(..., ge=0, le=100)
+    regime: Optional[HurstRegime] = None
+    entry_zone_lower: Optional[float] = None
+    entry_zone_upper: Optional[float] = None
+    target_exit: Optional[float] = None
+    stop_loss: Optional[float] = None
+    risk_distance_pct: Optional[float] = None
+    evidence_bullish: list[EvidenceSignal] = Field(default_factory=list)
+    evidence_bearish: list[EvidenceSignal] = Field(default_factory=list)
+    evidence_neutral: list[EvidenceSignal] = Field(default_factory=list)
+    logic_summary: str = ""
+    raw_inputs: dict[str, Any] = Field(default_factory=dict)
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+# ---------------------------------------------------------------------------
+# Trade journal / performance schemas (001-investment-assistant / T008)
+# ---------------------------------------------------------------------------
+
+
+class TradeJournalEntry(BaseModel):
+    """An immutable log of a user action triggered from the Strategy Dashboard."""
+    id: str = Field(default_factory=lambda: __import__("uuid").uuid4().hex)
+    created_at: datetime = Field(default_factory=datetime.now)
+    symbol: str
+    event_type: str = Field(..., description="entry | exit")
+    side: str = Field(..., description="long | short")
+    price: float = Field(..., gt=0)
+    recommendation_snapshot: dict[str, Any] = Field(default_factory=dict)
+    notes: Optional[str] = None
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+class PerformanceSummary(BaseModel):
+    """Aggregated analytics computed from closed simulated positions."""
+    as_of_date: date
+    symbol: Optional[str] = None
+    closed_trade_count: int = 0
+    open_trade_count: int = 0
+    win_rate: Optional[float] = None
+    avg_return_pct: Optional[float] = None
+    stop_loss_hit_rate: Optional[float] = None
+    warnings: list[str] = Field(default_factory=list)

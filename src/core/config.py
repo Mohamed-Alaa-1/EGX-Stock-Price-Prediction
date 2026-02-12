@@ -69,6 +69,9 @@ class Config:
     # Cross-listings / GDR
     CROSS_LISTINGS_PATH = METADATA_DIR / "cross_listings.json"
 
+    # Investment-assistant trade journal (001-investment-assistant / T009)
+    TRADE_JOURNAL_DB_PATH = METADATA_DIR / "trade_journal.sqlite3"
+
     @classmethod
     def ensure_directories(cls) -> None:
         """Create all required directories if they don't exist."""
