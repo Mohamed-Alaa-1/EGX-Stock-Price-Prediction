@@ -86,24 +86,4 @@ python -m src.app.main
 - All changes persist immediately to `src/data/egx_stocks.csv`
 - yfinance integration ensures symbol validity before adding
 
-## Implementation Status
 
-✅ **All 62 tasks complete** from the EGX Price Prediction spec (100%)
-✅ **All 44 tasks complete** from the Investment Assistant spec (100%)
-
-### EGX Price Prediction
-- Phase 1: Setup (8 tasks)
-- Phase 2: Foundational (13 tasks)
-- Phase 3: Prediction (8 tasks)
-- Phase 4: Charts (8 tasks)
-- Phase 5: Training (13 tasks)
-- Phase 6: Stock Universe (6 tasks)
-- Phase 7: Polish (6 tasks)
-
-### Investment Assistant
-- Phase 3: Strategy Engine core (T001–T024)
-- Phase 4: Strategy Dashboard UI (T025–T030)
-- Phase 5: Trade Journal & Performance (T002–T003, T005–T006, T008, T031–T041)
-- Phase 6: Polish (T042–T044)
-
-See [tasks.md](specs/001-investment-assistant/tasks.md) for detailed breakdown.
