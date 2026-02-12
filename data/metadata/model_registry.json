@@ -1,0 +1,563 @@
+{
+  "COMI_20260210_231408": {
+    "artifact_id": "COMI_20260210_231408",
+    "type": "per_stock",
+    "covered_symbols": [
+      "COMI"
+    ],
+    "created_at": "2026-02-10T23:14:08.792560",
+    "last_trained_at": "2026-02-10T23:14:08.792564",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "COMI.CA"
+      },
+      "fetched_at": "2026-02-10T23:13:46.361504",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.4251543283462524,
+      "model_rmse": 2.1185386180877686,
+      "model_mape": 2.887606143951416,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\COMI_20260210_231408.pt"
+  },
+  "PHDC_20260210_231520": {
+    "artifact_id": "PHDC_20260210_231520",
+    "type": "per_stock",
+    "covered_symbols": [
+      "PHDC"
+    ],
+    "created_at": "2026-02-10T23:15:20.608098",
+    "last_trained_at": "2026-02-10T23:15:20.608101",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "PHDC.CA"
+      },
+      "fetched_at": "2026-02-10T23:15:02.773506",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 0.13072897493839264,
+      "model_rmse": 0.19666427373886108,
+      "model_mape": 4.009706497192383,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\PHDC_20260210_231520.pt"
+  },
+  "FED_20260210_232032": {
+    "artifact_id": "FED_20260210_232032",
+    "type": "federated",
+    "covered_symbols": [
+      "COMI",
+      "PHDC",
+      "CCAP"
+    ],
+    "created_at": "2026-02-10T23:20:32.432431",
+    "last_trained_at": "2026-02-10T23:20:32.432433",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "COMI.CA"
+      },
+      "fetched_at": "2026-02-10T23:20:01.090111",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1_federated",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "avg_mae": 1.7000904977321625,
+      "avg_rmse": 2.3399239679177604,
+      "avg_mape": 7.037919839223226
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\FED_20260210_232032.pt"
+  },
+  "COMI_20260210_232102": {
+    "artifact_id": "COMI_20260210_232102",
+    "type": "per_stock",
+    "covered_symbols": [
+      "COMI"
+    ],
+    "created_at": "2026-02-10T23:21:02.479939",
+    "last_trained_at": "2026-02-10T23:21:02.479941",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "COMI.CA"
+      },
+      "fetched_at": "2026-02-10T23:20:44.470368",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.3968324661254883,
+      "model_rmse": 2.069246292114258,
+      "model_mape": 2.823678970336914,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\COMI_20260210_232102.pt"
+  },
+  "COMI_20260210_232307": {
+    "artifact_id": "COMI_20260210_232307",
+    "type": "per_stock",
+    "covered_symbols": [
+      "COMI"
+    ],
+    "created_at": "2026-02-10T23:23:07.863574",
+    "last_trained_at": "2026-02-10T23:23:07.863577",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "COMI.CA"
+      },
+      "fetched_at": "2026-02-10T23:22:50.134646",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.7762459516525269,
+      "model_rmse": 2.721468448638916,
+      "model_mape": 3.2464067935943604,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\COMI_20260210_232307.pt"
+  },
+  "COMI_20260210_232351": {
+    "artifact_id": "COMI_20260210_232351",
+    "type": "per_stock",
+    "covered_symbols": [
+      "COMI"
+    ],
+    "created_at": "2026-02-10T23:23:51.384530",
+    "last_trained_at": "2026-02-10T23:23:51.384533",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "COMI.CA"
+      },
+      "fetched_at": "2026-02-10T23:23:33.582878",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.385116457939148,
+      "model_rmse": 2.0289578437805176,
+      "model_mape": 2.8165268898010254,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\COMI_20260210_232351.pt"
+  },
+  "ETEL_20260210_232421": {
+    "artifact_id": "ETEL_20260210_232421",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ETEL"
+    ],
+    "created_at": "2026-02-10T23:24:21.537045",
+    "last_trained_at": "2026-02-10T23:24:21.537048",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ETEL.CA"
+      },
+      "fetched_at": "2026-02-10T23:24:03.504770",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.0445548295974731,
+      "model_rmse": 1.5042353868484497,
+      "model_mape": 4.687569618225098,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\ETEL_20260210_232421.pt"
+  },
+  "SWDY_20260210_233224": {
+    "artifact_id": "SWDY_20260210_233224",
+    "type": "per_stock",
+    "covered_symbols": [
+      "SWDY"
+    ],
+    "created_at": "2026-02-10T23:32:24.340727",
+    "last_trained_at": "2026-02-10T23:32:24.340731",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "SWDY.CA"
+      },
+      "fetched_at": "2026-02-10T23:32:05.428107",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 1.9744598865509033,
+      "model_rmse": 3.1071531772613525,
+      "model_mape": 7.4071197509765625,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\SWDY_20260210_233224.pt"
+  },
+  "XAUUSD_20260210_234125": {
+    "artifact_id": "XAUUSD_20260210_234125",
+    "type": "per_stock",
+    "covered_symbols": [
+      "XAUUSD"
+    ],
+    "created_at": "2026-02-10T23:41:25.072364",
+    "last_trained_at": "2026-02-10T23:41:25.072367",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "GC=F"
+      },
+      "fetched_at": "2026-02-10T23:41:05.180994",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 39.05693435668945,
+      "model_rmse": 60.41184997558594,
+      "model_mape": 1.7376117706298828,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\XAUUSD_20260210_234125.pt"
+  },
+  "FWRY_20260210_235301": {
+    "artifact_id": "FWRY_20260210_235301",
+    "type": "per_stock",
+    "covered_symbols": [
+      "FWRY"
+    ],
+    "created_at": "2026-02-10T23:53:01.213764",
+    "last_trained_at": "2026-02-10T23:53:01.213767",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "FWRY.CA"
+      },
+      "fetched_at": "2026-02-10T23:52:41.316030",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 0.2881024479866028,
+      "model_rmse": 0.3710007667541504,
+      "model_mape": 4.36428689956665,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\FWRY_20260210_235301.pt"
+  },
+  "PRMH_20260210_235639": {
+    "artifact_id": "PRMH_20260210_235639",
+    "type": "per_stock",
+    "covered_symbols": [
+      "PRMH"
+    ],
+    "created_at": "2026-02-10T23:56:39.619359",
+    "last_trained_at": "2026-02-10T23:56:39.619362",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "PRMH.CA"
+      },
+      "fetched_at": "2026-02-10T23:56:20.420035",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-09"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-09",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 0.02583599090576172,
+      "model_rmse": 0.035392411053180695,
+      "model_mape": 3.586469888687134,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\stocks-project\\data\\models\\PRMH_20260210_235639.pt"
+  }
+}

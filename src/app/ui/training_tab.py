@@ -2,31 +2,31 @@
 Training tab UI component.
 """
 
+from datetime import datetime
+
+from PySide6.QtCore import Qt, QThread, Signal
 from PySide6.QtWidgets import (
-    QWidget,
-    QVBoxLayout,
-    QHBoxLayout,
-    QLabel,
-    QPushButton,
-    QProgressBar,
-    QTextEdit,
+    QButtonGroup,
     QGroupBox,
+    QHBoxLayout,
     QListWidget,
     QMessageBox,
+    QProgressBar,
+    QPushButton,
     QRadioButton,
-    QButtonGroup,
+    QTextEdit,
+    QVBoxLayout,
+    QWidget,
 )
-from PySide6.QtCore import Qt, QThread, Signal
-from datetime import datetime
-from typing import Optional
 
+from app.ui.stock_selector import StockSelectorWidget
 from core.schemas import ModelArtifact, PriceSeries
+from data.providers.registry import get_provider_registry
 from ml.config import TrainingConfig
-from services.training_service import TrainingService
 from services.model_registry import get_registry
 from services.model_staleness import get_staleness_message
-from data.providers.registry import get_provider_registry
-from app.ui.stock_selector import StockSelectorWidget
+from services.portfolio_service import PortfolioService
+from services.training_service import TrainingService
 
 
 class TrainingWorker(QThread):
@@ -39,10 +39,10 @@ class TrainingWorker(QThread):
     def __init__(
         self,
         mode: str,
-        symbol: Optional[str],
-        symbols: Optional[list[str]],
-        series: Optional[PriceSeries],
-        series_by_symbol: Optional[dict[str, PriceSeries]],
+        symbol: str | None,
+        symbols: list[str] | None,
+        series: PriceSeries | None,
+        series_by_symbol: dict[str, PriceSeries] | None,
         config: TrainingConfig,
     ):
         super().__init__()
@@ -92,7 +92,7 @@ class TrainingTab(QWidget):
 
     def __init__(self):
         super().__init__()
-        self.worker: Optional[TrainingWorker] = None
+        self.worker: TrainingWorker | None = None
         self._init_ui()
         self._refresh_model_list()
 
@@ -179,6 +179,25 @@ class TrainingTab(QWidget):
         models_group.setLayout(models_layout)
         layout.addWidget(models_group)
 
+        # Portfolio insights (US2 — federated mode only)
+        portfolio_group = QGroupBox("Portfolio Insights (Federated)")
+        portfolio_layout = QVBoxLayout()
+
+        self.portfolio_button = QPushButton("Compute Portfolio Insights")
+        self.portfolio_button.clicked.connect(self._on_portfolio_insights)
+        portfolio_layout.addWidget(self.portfolio_button)
+
+        self.portfolio_output = QTextEdit()
+        self.portfolio_output.setReadOnly(True)
+        self.portfolio_output.setMaximumHeight(200)
+        self.portfolio_output.setPlaceholderText(
+            "Select 2+ stocks in federated mode and click above"
+        )
+        portfolio_layout.addWidget(self.portfolio_output)
+
+        portfolio_group.setLayout(portfolio_layout)
+        layout.addWidget(portfolio_group)
+
         self.setLayout(layout)
 
     def _on_train(self):
@@ -224,7 +243,10 @@ class TrainingTab(QWidget):
                         continue
                     series_by_symbol[sym] = s
                 if len(series_by_symbol) < 2:
-                    raise ValueError(f"Need at least 2 stocks with data, got {len(series_by_symbol)}")
+                    raise ValueError(
+                        "Need at least 2 stocks with data,"
+                        f" got {len(series_by_symbol)}"
+                    )
                 series = None
                 worker_symbols = list(series_by_symbol.keys())
 
@@ -263,14 +285,25 @@ class TrainingTab(QWidget):
         """Handle training completion."""
         self._log(f"Training complete! Artifact ID: {artifact.artifact_id}")
         self._log(f"Metrics: {artifact.metrics}")
+
+        # Surface signal validation results persisted during training
+        self._log_signal_validation(artifact)
+
         self._reset_ui()
         self._refresh_model_list()
 
-        QMessageBox.information(
-            self,
-            "Training Complete",
-            f"Model trained successfully!\n\nArtifact ID: {artifact.artifact_id}\nSymbols: {', '.join(artifact.covered_symbols)}",
+        summary = (
+            f"Model trained successfully!\n\n"
+            f"Artifact ID: {artifact.artifact_id}\n"
+            f"Symbols: {', '.join(artifact.covered_symbols)}"
         )
+
+        # Append validation summary to dialog
+        val_summary = self._format_validation_summary(artifact)
+        if val_summary:
+            summary += f"\n\n--- Signal Validation ---\n{val_summary}"
+
+        QMessageBox.information(self, "Training Complete", summary)
 
     def _on_training_error(self, error: str):
         """Handle training error."""
@@ -322,6 +355,81 @@ class TrainingTab(QWidget):
                     self.stock_selector.select_symbol(sym)
                 self._on_train()
 
+    def _on_portfolio_insights(self):
+        """Compute portfolio insights for selected symbols."""
+        symbols = self.stock_selector.get_selected_symbols()
+        if len(symbols) < 2:
+            QMessageBox.warning(
+                self,
+                "Insufficient Stocks",
+                "Portfolio insights require at least 2 stocks.",
+            )
+            return
+
+        self.portfolio_button.setEnabled(False)
+        self.portfolio_output.setText("Computing portfolio insights...")
+
+        try:
+            registry = get_provider_registry()
+            series_by_symbol: dict[str, PriceSeries] = {}
+            for sym in symbols:
+                s = registry.fetch_with_fallback(sym, interval="1d")
+                if s is not None:
+                    series_by_symbol[sym] = s
+
+            if len(series_by_symbol) < 2:
+                self.portfolio_output.setHtml(
+                    "<span style='color: red;'>Not enough data. Need ≥ 2 stocks with data.</span>"
+                )
+                return
+
+            result = PortfolioService.optimize(series_by_symbol)
+
+            lines = [f"<b>Portfolio Insights ({', '.join(result.symbols)})</b>"]
+            lines.append(f"As-of: {result.as_of_date} | Lookback: {result.lookback_days} days")
+
+            # Min-variance weights
+            if result.mpt_min_variance_weights:
+                lines.append("<br/><b>Min-Variance Weights:</b>")
+                for sym, w in sorted(result.mpt_min_variance_weights.items(), key=lambda x: -x[1]):
+                    lines.append(f"  {sym}: {w * 100:.1f}%")
+
+            # Portfolio volatility
+            if result.portfolio_volatility is not None:
+                lines.append(f"Portfolio Vol: {result.portfolio_volatility * 100:.2f}%")
+
+            # Risk parity
+            if result.risk_parity_weights:
+                lines.append("<br/><b>Risk Parity Weights:</b>")
+                for sym, w in sorted(result.risk_parity_weights.items(), key=lambda x: -x[1]):
+                    rc = result.risk_contributions.get(sym, 0) if result.risk_contributions else 0
+                    lines.append(f"  {sym}: {w * 100:.1f}% (risk contrib: {rc * 100:.1f}%)")
+
+            # Frontier summary
+            if result.mpt_frontier:
+                lines.append(f"<br/><b>Efficient Frontier:</b> {len(result.mpt_frontier)} points")
+                best = max(result.mpt_frontier, key=lambda p: p.get("sharpe", 0))
+                lines.append(
+                    f"Best Sharpe on frontier: {best.get('sharpe', 0):.3f} "
+                    f"(ret={best.get('expected_return', 0) * 100:.2f}%, "
+                    f"vol={best.get('volatility', 0) * 100:.2f}%)"
+                )
+
+            for w in result.warnings:
+                lines.append(f"<span style='color: orange;'>⚠ {w}</span>")
+
+            lines.append(f"<small>Cov: {result.cov_method}, α={result.shrinkage_alpha}</small>")
+
+            self.portfolio_output.setHtml("<br/>".join(lines))
+
+        except Exception as e:
+            self.portfolio_output.setHtml(
+                f"<span style='color: red;'>Portfolio failed: {e}</span>"
+            )
+
+        finally:
+            self.portfolio_button.setEnabled(True)
+
     def _refresh_model_list(self):
         """Refresh saved models list."""
         self.models_list.clear()
@@ -344,6 +452,77 @@ class TrainingTab(QWidget):
         formatted = f"[{timestamp}] {message}"
         print(f"[TrainingTab] {formatted}")
         self.progress_text.append(formatted)
+
+    def _log_signal_validation(self, artifact: ModelArtifact):
+        """Log signal validation results from artifact hyperparams."""
+        hp = artifact.hyperparams or {}
+        sv = hp.get("signal_validation")
+        if not sv:
+            return
+
+        if isinstance(sv, dict) and "adf_p_value" in sv:
+            # Per-stock: single validation result
+            self._log_single_validation("", sv)
+        elif isinstance(sv, dict):
+            # Federated: keyed by symbol
+            for sym, val in sv.items():
+                if isinstance(val, dict) and "adf_p_value" in val:
+                    self._log_single_validation(f"[{sym}] ", val)
+                elif isinstance(val, dict) and "error" in val:
+                    self._log(f"⚠ [{sym}] Signal validation error: {val['error']}")
+
+    def _log_single_validation(self, prefix: str, val: dict):
+        """Log a single validation result to progress text."""
+        adf_p = val.get("adf_p_value")
+        hurst = val.get("hurst_exponent")
+        regime = val.get("hurst_regime", "")
+
+        if adf_p is not None:
+            stationary = "stationary" if val.get("adf_stationary") else "non-stationary"
+            self._log(f"{prefix}ADF p-value: {adf_p:.4f} ({stationary})")
+        if hurst is not None:
+            self._log(f"{prefix}Hurst exponent: {hurst:.3f} (regime: {regime})")
+
+        warnings_list = val.get("warnings", [])
+        for w in warnings_list:
+            self._log(f"⚠ {prefix}{w}")
+
+    def _format_validation_summary(self, artifact: ModelArtifact) -> str:
+        """Format validation summary for the completion dialog."""
+        hp = artifact.hyperparams or {}
+        sv = hp.get("signal_validation")
+        if not sv:
+            return ""
+
+        lines = []
+        if isinstance(sv, dict) and "adf_p_value" in sv:
+            # Per-stock
+            self._append_validation_lines(lines, "", sv)
+        elif isinstance(sv, dict):
+            # Federated
+            for sym, val in sv.items():
+                if isinstance(val, dict) and "adf_p_value" in val:
+                    self._append_validation_lines(lines, f"[{sym}] ", val)
+                elif isinstance(val, dict) and "error" in val:
+                    lines.append(f"⚠ [{sym}] {val['error']}")
+
+        return "\n".join(lines)
+
+    @staticmethod
+    def _append_validation_lines(lines: list, prefix: str, val: dict):
+        """Append formatted validation lines."""
+        adf_p = val.get("adf_p_value")
+        hurst = val.get("hurst_exponent")
+        regime = val.get("hurst_regime", "")
+
+        if adf_p is not None:
+            stationary = "stationary" if val.get("adf_stationary") else "non-stationary"
+            lines.append(f"{prefix}ADF p={adf_p:.4f} ({stationary})")
+        if hurst is not None:
+            lines.append(f"{prefix}Hurst={hurst:.3f} ({regime})")
+
+        for w in val.get("warnings", []):
+            lines.append(f"⚠ {prefix}{w}")
 
     def _reset_ui(self):
         """Reset UI after training."""

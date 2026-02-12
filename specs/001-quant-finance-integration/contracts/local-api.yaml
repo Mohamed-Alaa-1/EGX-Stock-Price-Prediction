@@ -1,0 +1,281 @@
+openapi: 3.0.3
+info:
+  title: Quant Finance Integration (Local API)
+  version: 0.1.0
+  description: |
+    Local-only contract for internal UI↔services orchestration.
+    This project is a desktop app; endpoints are conceptual and map to Python service methods.
+servers:
+  - url: http://127.0.0.1:PORT
+paths:
+  /predict:
+    post:
+      summary: Predict next trading-day close (existing) + risk companion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PredictRequest'
+      responses:
+        '200':
+          description: Forecast result including risk metrics (VaR/Sharpe)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ForecastWithRisk'
+  /risk/{symbol}:
+    get:
+      summary: Compute risk metrics snapshot for a symbol
+      parameters:
+        - in: path
+          name: symbol
+          required: true
+          schema: { type: string }
+        - in: query
+          name: lookbackDays
+          required: false
+          schema: { type: integer, minimum: 30, default: 252 }
+      responses:
+        '200':
+          description: Risk metrics snapshot
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RiskMetricsSnapshot'
+  /validate-signal/{symbol}:
+    get:
+      summary: Compute statistical validation (ADF + Hurst) for a symbol
+      parameters:
+        - in: path
+          name: symbol
+          required: true
+          schema: { type: string }
+        - in: query
+          name: lookbackDays
+          required: false
+          schema: { type: integer, minimum: 50, default: 252 }
+      responses:
+        '200':
+          description: Statistical validation result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StatisticalValidationResult'
+  /backtest:
+    post:
+      summary: Run a single-symbol backtest with EGX transaction costs
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BacktestRequest'
+      responses:
+        '200':
+          description: Backtest run summary (gross and net-of-cost)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BacktestRun'
+  /portfolio/optimize:
+    post:
+      summary: Compute federated-mode portfolio insights (MPT frontier + risk parity)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PortfolioOptimizeRequest'
+      responses:
+        '200':
+          description: Portfolio optimization result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PortfolioOptimizationResult'
+  /gdr/premium-discount/{localSymbol}:
+    get:
+      summary: Compute GDR premium/discount series for a mapped cross-listed symbol
+      parameters:
+        - in: path
+          name: localSymbol
+          required: true
+          schema: { type: string }
+        - in: query
+          name: lookbackDays
+          required: false
+          schema: { type: integer, minimum: 30, default: 252 }
+      responses:
+        '200':
+          description: Premium/discount series
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GdrPremiumDiscountSeries'
+components:
+  schemas:
+    PredictRequest:
+      type: object
+      required: [symbol, method]
+      properties:
+        symbol: { type: string }
+        method: { type: string, enum: [ml, naive, sma] }
+        target_date: { type: string, format: date, nullable: true }
+    ForecastWithRisk:
+      type: object
+      required: [forecast, risk]
+      properties:
+        forecast:
+          type: object
+          required: [symbol, target_date, predicted_close]
+          properties:
+            symbol: { type: string }
+            target_date: { type: string, format: date }
+            predicted_close: { type: number }
+            method: { type: string }
+            generated_at: { type: string, format: date-time }
+        risk:
+          $ref: '#/components/schemas/RiskMetricsSnapshot'
+    RiskMetricsSnapshot:
+      type: object
+      required: [symbol, as_of_date, var_method]
+      properties:
+        symbol: { type: string }
+        as_of_date: { type: string, format: date }
+        lookback_days: { type: integer }
+        return_type: { type: string, enum: [simple, log] }
+        var_method: { type: string, enum: [historical] }
+        var_95_pct: { type: number, nullable: true }
+        var_99_pct: { type: number, nullable: true }
+        var_95_abs: { type: number, nullable: true }
+        var_99_abs: { type: number, nullable: true }
+        sharpe: { type: number, nullable: true }
+        risk_free_rate: { type: number }
+        warnings:
+          type: array
+          items: { type: string }
+    StatisticalValidationResult:
+      type: object
+      required: [symbol, as_of_date]
+      properties:
+        symbol: { type: string }
+        as_of_date: { type: string, format: date }
+        lookback_days: { type: integer }
+        adf_pvalue: { type: number, nullable: true }
+        adf_statistic: { type: number, nullable: true }
+        adf_used_lag: { type: integer, nullable: true }
+        adf_nobs: { type: integer, nullable: true }
+        adf_regression: { type: string }
+        adf_autolag: { type: string }
+        hurst: { type: number, nullable: true }
+        hurst_method: { type: string, enum: [aggvar_increments] }
+        hurst_r2: { type: number, nullable: true }
+        hurst_regime: { type: string, enum: [mean_reverting, random_like, trending], nullable: true }
+        warnings:
+          type: array
+          items: { type: string }
+    TransactionCostModel:
+      type: object
+      required: [commission_bps, stamp_duty_bps]
+      properties:
+        commission_bps: { type: number }
+        stamp_duty_bps: { type: number }
+        slippage_bps: { type: number, default: 0 }
+    BacktestRequest:
+      type: object
+      required: [symbol, strategy, start_date, end_date, cost_model]
+      properties:
+        symbol: { type: string }
+        strategy: { type: string, enum: [rsi, macd, ema] }
+        params: { type: object, additionalProperties: true }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        cost_model: { $ref: '#/components/schemas/TransactionCostModel' }
+    BacktestRun:
+      type: object
+      required: [symbol, strategy, start_date, end_date, gross_total_return, net_total_return]
+      properties:
+        symbol: { type: string }
+        strategy: { type: string }
+        start_date: { type: string, format: date }
+        end_date: { type: string, format: date }
+        gross_total_return: { type: number }
+        net_total_return: { type: number }
+        max_drawdown: { type: number, nullable: true }
+        turnover: { type: number, nullable: true }
+        total_costs_paid: { type: number, nullable: true }
+        warnings:
+          type: array
+          items: { type: string }
+    PortfolioOptimizeRequest:
+      type: object
+      required: [symbols, lookback_days]
+      properties:
+        symbols:
+          type: array
+          minItems: 2
+          items: { type: string }
+        lookback_days: { type: integer, default: 252 }
+        min_weight: { type: number, default: 0 }
+        max_weight: { type: number, default: 1 }
+        shrinkage_alpha: { type: number, default: 0.1 }
+        diagonal_loading_lambda: { type: number, default: 0 }
+    PortfolioOptimizationResult:
+      type: object
+      required: [symbols, as_of_date]
+      properties:
+        symbols:
+          type: array
+          items: { type: string }
+        as_of_date: { type: string, format: date }
+        constraints:
+          type: object
+          additionalProperties: true
+        mpt_min_variance_weights:
+          type: object
+          additionalProperties: { type: number }
+          nullable: true
+        mpt_frontier:
+          type: array
+          items:
+            type: object
+            required: [expected_return, volatility, weights]
+            properties:
+              target_return: { type: number, nullable: true }
+              expected_return: { type: number }
+              volatility: { type: number }
+              weights:
+                type: object
+                additionalProperties: { type: number }
+        risk_parity_weights:
+          type: object
+          additionalProperties: { type: number }
+          nullable: true
+        risk_contributions:
+          type: object
+          additionalProperties: { type: number }
+          nullable: true
+        warnings:
+          type: array
+          items: { type: string }
+    GdrPremiumDiscountSeries:
+      type: object
+      required: [local_symbol, gdr_symbol, fx_pair, ratio_local_per_gdr]
+      properties:
+        local_symbol: { type: string }
+        gdr_symbol: { type: string }
+        fx_pair: { type: string }
+        ratio_local_per_gdr: { type: number }
+        points:
+          type: array
+          items:
+            type: object
+            required: [date, value]
+            properties:
+              date: { type: string, format: date }
+              value: { type: number }
+              is_imputed_fx: { type: boolean, default: false }
+        warnings:
+          type: array
+          items: { type: string }

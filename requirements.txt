@@ -16,3 +16,7 @@ PySide6-WebEngine>=6.5.0
 # Technical indicators
 ta-lib>=0.4.0; platform_system != "Windows"
 pandas-ta>=0.3.14b0
+
+# Quant finance (risk, validation, portfolio optimization)
+scipy>=1.11.0
+statsmodels>=0.14.0

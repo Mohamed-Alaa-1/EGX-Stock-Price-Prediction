@@ -1,0 +1,91 @@
+diff --git a/specs/001-quant-finance-integration/spec.md b/specs/001-quant-finance-integration/spec.md
+index 1111111..2222222 100644
+--- a/specs/001-quant-finance-integration/spec.md
++++ b/specs/001-quant-finance-integration/spec.md
+@@
+ - **FR-001**: System MUST compute and display a 1-day VaR estimate at 95% and 99% confidence for the currently selected ticker alongside any price prediction.
+ - **FR-002**: System MUST display the VaR assumptions used (methodology label, lookback window, and confidence level).
+ - **FR-003**: System MUST compute and display a historical Sharpe ratio for the selected ticker using a clearly stated lookback window and return convention.
+ 
++- **FR-017**: System MUST display a baseline prediction (e.g., “naive: last close”) alongside the model prediction for every prediction run.
++
+ - **FR-004**: Before training or retraining a model for a ticker, the system MUST compute and record ADF stationarity test outputs (including the test target and p-value) for the time series being modeled.
+ - **FR-005**: Before training or retraining a model for a ticker, the system MUST compute and record a Hurst exponent estimate and a regime classification (trending / random-like / mean-reverting).
+ - **FR-006**: If statistical validation indicates weak/unsuitable signal for the chosen modeling assumption, the system MUST flag this clearly in the user-facing output and must not present the prediction as high-confidence.
+
+diff --git a/specs/001-quant-finance-integration/plan.md b/specs/001-quant-finance-integration/plan.md
+index 3333333..4444444 100644
+--- a/specs/001-quant-finance-integration/plan.md
++++ b/specs/001-quant-finance-integration/plan.md
+@@
+ ## Constitution Check
+ 
+-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+-
+ *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
+ 
+ Derived from [.specify/memory/constitution.md](../../.specify/memory/constitution.md):
+@@
+ ├── data/
+ │   ├── cache_store.py                 # Existing Parquet cache
+ │   ├── providers/
+ │   │   ├── base.py
+ │   │   ├── csv_provider.py
+ │   │   └── registry.py
+-│   └── metadata/
+-│       └── cross_listings.json        # NEW: local↔GDR mapping + ratio + FX pair
++
++data/
++└── metadata/
++    └── cross_listings.json            # NEW: local↔GDR mapping + ratio + FX pair
+ ├── ml/
+ │   ├── federated_train.py             # Existing FedAvg trainer
+ │   └── portfolio.py                   # NEW: MPT frontier + risk parity (SciPy)
+ └── services/
+
+diff --git a/specs/001-quant-finance-integration/tasks.md b/specs/001-quant-finance-integration/tasks.md
+index 5555555..6666666 100644
+--- a/specs/001-quant-finance-integration/tasks.md
++++ b/specs/001-quant-finance-integration/tasks.md
+@@
+ - [ ] T009 [P] [US1] Implement risk snapshot orchestration in src/services/risk_service.py (build RiskMetricsSnapshot from PriceSeries + Config defaults)
+ - [ ] T010 [P] [US1] Implement signal validation orchestration in src/services/signal_validation_service.py (ADF + Hurst + warnings from PriceSeries)
+-- [ ] T011 [US1] Integrate risk+validation into predictions in src/services/prediction_service.py (compute on every predict; attach results to ForecastResult.model_features)
+-- [ ] T012 [US1] Render risk+validation in the UI in src/app/ui/prediction_tab.py (show VaR+Sharpe+ADF+Hurst with assumptions and “insufficient data” messages)
++- [ ] T011 [US1] Integrate risk+validation+baseline into predictions in src/services/prediction_service.py (compute on every predict; attach results + baseline to ForecastResult.model_features)
++- [ ] T012 [US1] Render risk+validation+baseline in the UI in src/app/ui/prediction_tab.py (show prediction + baseline, VaR+Sharpe+ADF+Hurst with assumptions and “insufficient data” messages)
+ - [ ] T013 [US1] Run validation before training in src/services/training_service.py (compute ADF/Hurst prior to train; persist outputs into ModelArtifact.hyperparams and log warnings)
+ - [ ] T014 [US1] Surface validation outputs in src/app/ui/training_tab.py (display ADF p-value, Hurst, regime, and warnings during/after training)
+@@
+ ## Phase 6: Polish & Cross-Cutting Concerns
+ 
+ **Purpose**: Make the feature robust, consistent, and easy to validate.
+ 
+ - [ ] T027 [P] Validate P1/P2/P3 flows by following specs/001-quant-finance-integration/quickstart.md end-to-end
+ - [ ] T028 [P] Run `ruff check .` using ruff.toml and fix any violations in the files Ruff reports
++- [ ] T029 [P] Add unit tests for VaR + Sharpe in tests/unit/test_quant_var_sharpe.py (include insufficient-data cases and tolerance-based assertions)
++- [ ] T030 [P] Add unit tests for ADF + Hurst in tests/unit/test_quant_adf_hurst.py (cover stable synthetic series + regime classification thresholds)
++- [ ] T031 [P] Add unit tests for EGX cost model/backtest accounting in tests/unit/test_backtest_cost_model.py (gross vs net, commissions + stamp duty)
++- [ ] T032 [P] Add unit tests for portfolio optimizers in tests/unit/test_portfolio_optimizers.py (long-only constraints, risk parity contributions sum checks)
++- [ ] T033 [P] Add a small fixed “reference dataset/fixture” + expected metric values to support SC-002 (place under tests/fixtures/ and document tolerances)
+@@
+ ### US3 parallelizable example
+ 
+-- Task: T020 Extend chart data contract in src/app/ui/web_bridge.py
+-- Task: T021 Render premium/discount series in the chart UI in src/app/ui/chart_template.html
++- Task: T023 Extend chart data contract in src/app/ui/web_bridge.py
++- Task: T024 Render premium/discount series in the chart UI in src/app/ui/chart_template.html
+@@
+ ### MVP First (US1 only)
+ 
+ 1. Complete Phase 1 + Phase 2
+-2. Implement US1 (T005–T011)
++2. Implement US1 (T007–T014)
+ 3. Validate US1 via the P1 steps in specs/001-quant-finance-integration/quickstart.md
+@@
+ ### Incremental Delivery
+ 
+-- Add US2 (T012–T017), validate P2 quickstart scenarios
+-- Add US3 (T018–T023), validate P3 quickstart scenarios
++- Add US2 (T015–T020), validate P2 quickstart scenarios
++- Add US3 (T021–T026), validate P3 quickstart scenarios

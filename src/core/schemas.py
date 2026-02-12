@@ -9,6 +9,41 @@ from typing import Any, Optional
 from pydantic import BaseModel, Field, field_validator
 
 
+# ---------------------------------------------------------------------------
+# Shared quant types (used by risk, validation, backtest, portfolio, GDR)
+# ---------------------------------------------------------------------------
+
+class ReturnType(str, Enum):
+    """Return convention."""
+    SIMPLE = "simple"
+    LOG = "log"
+
+
+class PriceField(str, Enum):
+    """Which price field to use."""
+    CLOSE = "close"
+    ADJUSTED_CLOSE = "adjusted_close"
+
+
+class HurstRegime(str, Enum):
+    """Hurst exponent regime classification."""
+    MEAN_REVERTING = "mean_reverting"
+    RANDOM_LIKE = "random_like"
+    TRENDING = "trending"
+
+
+class BacktestStrategy(str, Enum):
+    """Supported backtest strategies."""
+    RSI = "rsi"
+    MACD = "macd"
+    EMA = "ema"
+
+
+# ---------------------------------------------------------------------------
+# Original schemas
+# ---------------------------------------------------------------------------
+
+
 class StockStatus(str, Enum):
     """Stock listing status."""
     ACTIVE = "active"
@@ -167,3 +202,142 @@ class ForecastResult(BaseModel):
     is_model_stale: bool = Field(default=False)
     confidence_interval: Optional[dict[str, float]] = Field(default=None)
     model_features: dict[str, Any] = Field(default_factory=dict)
+
+
+# ---------------------------------------------------------------------------
+# Quant finance schemas (T003–T005)
+# ---------------------------------------------------------------------------
+
+class RiskMetricsSnapshot(BaseModel):
+    """Per-ticker risk companion alongside predictions (FR-001..FR-003)."""
+    symbol: str
+    as_of_date: date
+    lookback_days: int = 252
+    return_type: ReturnType = ReturnType.SIMPLE
+    var_method: str = "historical"
+    var_95_pct: Optional[float] = None
+    var_99_pct: Optional[float] = None
+    var_95_abs: Optional[float] = None
+    var_99_abs: Optional[float] = None
+    sharpe: Optional[float] = None
+    risk_free_rate: float = Field(default=0.0, description="Assumed risk-free rate (labeled)")
+    warnings: list[str] = Field(default_factory=list)
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+class StatisticalValidationResult(BaseModel):
+    """ADF + Hurst diagnostics prior to training (FR-004..FR-006)."""
+    symbol: str
+    as_of_date: date
+    lookback_days: int = 252
+    series_tested: str = "returns"
+
+    # ADF
+    adf_statistic: Optional[float] = None
+    adf_pvalue: Optional[float] = None
+    adf_used_lag: Optional[int] = None
+    adf_nobs: Optional[int] = None
+    adf_critical_values: Optional[dict[str, float]] = None
+    adf_regression: str = "c"
+    adf_autolag: str = "AIC"
+
+    # Hurst
+    hurst: Optional[float] = None
+    hurst_method: str = "aggvar_increments"
+    hurst_r2: Optional[float] = None
+    hurst_regime: Optional[HurstRegime] = None
+
+    warnings: list[str] = Field(default_factory=list)
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+class TransactionCostModel(BaseModel):
+    """User-configurable EGX cost assumptions (FR-010..FR-011)."""
+    commission_bps: float = Field(default=15.0, description="Commission in basis points")
+    stamp_duty_bps: float = Field(default=5.0, description="Stamp duty in basis points")
+    slippage_bps: float = Field(default=0.0, description="Slippage in basis points")
+    notes: Optional[str] = None
+
+    @property
+    def total_cost_rate(self) -> float:
+        """Total one-way cost as a decimal fraction."""
+        return (self.commission_bps + self.stamp_duty_bps + self.slippage_bps) / 10000.0
+
+
+class BacktestRun(BaseModel):
+    """Stored definition of a strategy evaluation (FR-009..FR-011)."""
+    run_id: str = ""
+    symbol: str
+    strategy: BacktestStrategy
+    strategy_params: dict[str, Any] = Field(default_factory=dict)
+    start_date: date
+    end_date: date
+    cost_model: TransactionCostModel = Field(default_factory=TransactionCostModel)
+
+    # Outputs
+    gross_total_return: float = 0.0
+    net_total_return: float = 0.0
+    gross_cagr: Optional[float] = None
+    net_cagr: Optional[float] = None
+    gross_sharpe: Optional[float] = None
+    net_sharpe: Optional[float] = None
+    max_drawdown: Optional[float] = None
+    turnover: Optional[float] = None
+    total_costs_paid: Optional[float] = None
+    trade_count: int = 0
+    warnings: list[str] = Field(default_factory=list)
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+class PortfolioOptimizationResult(BaseModel):
+    """Federated-mode allocation suggestions (FR-012..FR-014)."""
+    symbols: list[str]
+    as_of_date: date
+    lookback_days: int = 252
+    return_type: ReturnType = ReturnType.SIMPLE
+    constraints: dict[str, Any] = Field(default_factory=lambda: {
+        "long_only": True, "min_weight": 0.0, "max_weight": 1.0, "sum_to_one": True,
+    })
+
+    # Inputs summary
+    mu: Optional[dict[str, float]] = None
+    cov_method: str = "shrunk_diag"
+    shrinkage_alpha: float = 0.1
+
+    # Outputs
+    mpt_min_variance_weights: Optional[dict[str, float]] = None
+    mpt_frontier: list[dict[str, Any]] = Field(default_factory=list)
+    risk_parity_weights: Optional[dict[str, float]] = None
+    risk_contributions: Optional[dict[str, float]] = None
+    portfolio_volatility: Optional[float] = None
+    warnings: list[str] = Field(default_factory=list)
+
+
+class GdrPremiumDiscountPoint(BaseModel):
+    """Single premium/discount data point."""
+    date: date
+    value: float
+    is_imputed_fx: bool = False
+
+
+class GdrPremiumDiscountSeries(BaseModel):
+    """Leading indicator for cross-listed stocks (FR-015..FR-016)."""
+    local_symbol: str
+    gdr_symbol: str
+    fx_pair: str
+    ratio_local_per_gdr: float
+    points: list[GdrPremiumDiscountPoint] = Field(default_factory=list)
+    definition: str = "(local_close - gdr_close_fx_adjusted * ratio) / gdr_close_fx_adjusted * 100"
+    warnings: list[str] = Field(default_factory=list)
