@@ -90,6 +90,22 @@
 - **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
 - **FR-005**: System MUST [behavior, e.g., "log all security events"]
 
+### Constitution-Driven Requirements (fill when applicable)
+
+<!--
+  If this feature outputs an “Assistant” recommendation (Buy/Sell/Hold), the constitution requires:
+  - Risk-First (capital preservation),
+  - Stop-Loss included (explicit N/A when HOLD),
+  - Conviction Score included (stable scale, lowered on disagreement),
+  - Technical signals explicitly weighted against ML predictions,
+  - UI clearly separates raw model outputs from Assistant-processed recommendation.
+-->
+
+- **INV-001**: System MUST implement Risk-First recommendation policy (default HOLD on uncertainty)
+- **INV-002**: Every recommendation MUST include Stop-Loss and Conviction Score
+- **INV-003**: System MUST compute an explicit blended score (ML + technical with disclosed weights)
+- **INV-004**: UI MUST clearly label and separate raw model outputs vs Assistant recommendation
+
 *Example of marking unclear requirements:*
 
 - **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]

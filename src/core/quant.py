@@ -310,3 +310,21 @@ def compute_validation(
         **hurst_result,
         warnings=warnings,
     )
+
+
+# ---------------------------------------------------------------------------
+# Convenience aliases (001-investment-assistant / T010–T011)
+# ---------------------------------------------------------------------------
+
+
+def calculate_var(
+    returns: pd.Series,
+    confidence: float = 0.95,
+) -> float | None:
+    """Alias for :func:`compute_var` – used by StrategyEngine."""
+    return compute_var(returns, confidence)
+
+
+def calculate_hurst(returns: pd.Series) -> dict:
+    """Alias for :func:`compute_hurst` – used by StrategyEngine."""
+    return compute_hurst(returns)

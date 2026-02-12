@@ -4,6 +4,8 @@
 
 ⚠️ **DISCLAIMER**: This tool is for educational and personal use only. Not financial advice. All predictions are experimental. Use at your own risk.
 
+If the app presents an “Assistant” recommendation (e.g., Buy/Sell/Hold), it will be clearly labeled as processed guidance and visually separated from raw model outputs.
+
 ## Overview
 
 A PySide6 desktop application that trains PyTorch LSTM models on EGX stock data and generates next trading-day price predictions.
@@ -16,6 +18,9 @@ A PySide6 desktop application that trains PyTorch LSTM models on EGX stock data 
 - **Local-First**: All data cached in Parquet files, models saved as PyTorch checkpoints
 - **Model Staleness**: 14-day threshold with automatic warnings
 - **EGX Stock Universe**: 20+ Egyptian stocks with searchable selector
+- **Strategy Dashboard**: ML-powered Buy/Hold/Sell recommendations with conviction scores
+- **Trade Journal**: Simulated trade logging with entry/exit tracking (SQLite-backed at `data/metadata/trade_journal.sqlite3`)
+- **Performance Review**: Win rate, average return, and stop-loss analytics
 
 ## Installation
 
@@ -36,13 +41,25 @@ python -m src.app.main
 
 ## Usage
 
-### Prediction Tab
+### Strategy Tab
 
 1. Search and select a stock (e.g., COMI - Commercial International Bank)
 2. Choose prediction method (ML Model/Naive Baseline/SMA Baseline)
-3. View chart with historical data and toggle indicators
-4. Click Predict for next trading-day forecast
-5. See predicted price, model info, staleness warnings, momentum
+3. Click Predict for next trading-day forecast
+4. See predicted price, model info, staleness warnings, momentum
+5. Review the **Assistant Recommendation** panel (Buy/Hold/Sell with conviction %)
+6. Use **Execute Entry** / **Log Exit** buttons to record simulated trades
+
+### Chart Tab
+
+- Full-size interactive candlestick chart with RSI/MACD/EMA/Support-Resistance overlays
+- Automatically loads when you select a stock in the Strategy tab
+
+### Performance Tab
+
+- View overall trade statistics (win rate, avg return, stop-loss hit rate)
+- See open positions and closed trade counts
+- Data persisted in `data/metadata/trade_journal.sqlite3`
 
 ### Training Tab
 
@@ -57,10 +74,24 @@ python -m src.app.main
 - View cache status and clear cached data
 - See configuration details
 
+### Stock Manager Tab
+
+- View all stocks in the universe (symbol, company name, sector)
+- **Remove** stocks by selecting rows and clicking "Remove Selected"
+- **Add** new stocks:
+  1. Enter a stock symbol (e.g., `AAPL` or `COMI.CA`)
+  2. Click "Validate with yfinance" to fetch company name automatically
+  3. Optionally edit the sector
+  4. Click "Add to Universe"
+- All changes persist immediately to `src/data/egx_stocks.csv`
+- yfinance integration ensures symbol validity before adding
+
 ## Implementation Status
 
-✅ **All 62 tasks complete** (100%)
+✅ **All 62 tasks complete** from the EGX Price Prediction spec (100%)
+✅ **All 44 tasks complete** from the Investment Assistant spec (100%)
 
+### EGX Price Prediction
 - Phase 1: Setup (8 tasks)
 - Phase 2: Foundational (13 tasks)
 - Phase 3: Prediction (8 tasks)
@@ -69,4 +100,10 @@ python -m src.app.main
 - Phase 6: Stock Universe (6 tasks)
 - Phase 7: Polish (6 tasks)
 
-See [tasks.md](specs/001-egx-price-prediction/tasks.md) for detailed breakdown.
+### Investment Assistant
+- Phase 3: Strategy Engine core (T001–T024)
+- Phase 4: Strategy Dashboard UI (T025–T030)
+- Phase 5: Trade Journal & Performance (T002–T003, T005–T006, T008, T031–T041)
+- Phase 6: Polish (T042–T044)
+
+See [tasks.md](specs/001-investment-assistant/tasks.md) for detailed breakdown.

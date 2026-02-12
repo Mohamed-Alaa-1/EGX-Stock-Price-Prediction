@@ -16,12 +16,13 @@ if str(src_path) not in sys.path:
 def main():
     """Main application entry point."""
     from PySide6.QtWidgets import QApplication, QMainWindow, QTabWidget, QVBoxLayout, QWidget
-    from app.ui.training_tab import TrainingTab
-    from app.ui.prediction_tab import PredictionTab
+
     from app.ui.disclaimer_banner import DisclaimerBanner
     from app.ui.launcher_dialog import LauncherDialog
-    from data.providers.registry import get_provider_registry
+    from app.ui.prediction_tab import PredictionTab
+    from app.ui.training_tab import TrainingTab
     from core.config import Config
+    from data.providers.registry import get_provider_registry
     
     # Ensure directories exist
     Config.ensure_directories()
@@ -63,12 +64,23 @@ def main():
     # Tab widget
     tabs = QTabWidget()
     
-    # Prediction tab
+    # Strategy tab (controls, recommendations, journal)
     prediction_tab = PredictionTab()
+    tabs.addTab(prediction_tab, "Strategy")
+
+    # Chart tab (full-size interactive chart)
+    from app.ui.chart_tab import ChartTab
+    chart_tab = ChartTab()
+    tabs.addTab(chart_tab, "Chart")
+
+    # Connect strategy tab stock selection → chart tab
+    prediction_tab.stock_selected.connect(chart_tab.load_symbol)
+    # Give strategy tab a reference for GDR overlay
+    prediction_tab._chart_tab = chart_tab
     
     # Set TradingView-specific timeframe options if applicable
     if provider_mode == "tradingview":
-        prediction_tab.chart_panel.set_timeframe_options([
+        chart_tab.chart_panel.set_timeframe_options([
             ("1 Min", "1m"),
             ("5 Min", "5m"),
             ("15 Min", "15m"),
@@ -78,8 +90,6 @@ def main():
             ("1 Month", "1mo"),
         ])
     
-    tabs.addTab(prediction_tab, "Prediction")
-    
     # Training tab
     training_tab = TrainingTab()
     tabs.addTab(training_tab, "Training")
@@ -88,6 +98,16 @@ def main():
     from app.ui.settings_panel import SettingsPanel
     settings_tab = SettingsPanel()
     tabs.addTab(settings_tab, "Settings")
+
+    # Stock Manager tab (add/remove stocks from universe)
+    from app.ui.stock_manager_tab import StockManagerTab
+    stock_manager_tab = StockManagerTab()
+    tabs.addTab(stock_manager_tab, "Stock Manager")
+
+    # Performance tab (T038)
+    from app.ui.performance_tab import PerformanceTab
+    performance_tab = PerformanceTab()
+    tabs.addTab(performance_tab, "Performance")
     
     central_layout.addWidget(tabs)
     central_widget.setLayout(central_layout)

@@ -8,7 +8,7 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: The examples below include test tasks. Tests are OPTIONAL unless the constitution or the feature spec requires them.
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
@@ -24,6 +24,16 @@ description: "Task list template for feature implementation"
 - **Web app**: `backend/src/`, `frontend/src/`
 - **Mobile**: `api/src/`, `ios/src/` or `android/src/`
 - Paths shown below assume single project - adjust based on plan.md structure
+
+## Constitution-Driven Task Additions (include when applicable)
+
+If the feature produces an “Assistant” recommendation (Buy/Sell/Hold), tasks MUST include:
+
+- Stop-Loss computation and formatting (price + %), including explicit N/A handling for HOLD
+- Conviction Score definition + calculation (stable scale; decreases on signal disagreement)
+- Signal blending implementation: technical signals explicitly weighted against ML prediction (weights disclosed)
+- UI work to clearly separate raw model outputs from Assistant-processed recommendation
+- Unit tests covering Risk-First policy and the recommendation output contract
 
 <!-- 
   ============================================================================

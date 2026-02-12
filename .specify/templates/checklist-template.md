@@ -32,6 +32,17 @@
 - [ ] CHK005 Item with specific criteria
 - [ ] CHK006 Final item in this category
 
+## Constitution Compliance (include when applicable)
+
+<!--
+  If this feature outputs an “Assistant” recommendation (Buy/Sell/Hold), include checklist items for:
+  - Risk-First (capital preservation) behavior,
+  - Stop-Loss always present (explicit N/A for HOLD),
+  - Conviction Score always present (stable scale; lowered on disagreement),
+  - Technical signals explicitly weighted against ML predictions (weights disclosed),
+  - UI clearly separates raw model outputs vs Assistant recommendation.
+-->
+
 ## Notes
 
 - Check items off as completed: `[x]`
