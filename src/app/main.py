@@ -99,6 +99,11 @@ def main():
     settings_tab = SettingsPanel()
     tabs.addTab(settings_tab, "Settings")
 
+    # Stock Manager tab (add/remove stocks from universe)
+    from app.ui.stock_manager_tab import StockManagerTab
+    stock_manager_tab = StockManagerTab()
+    tabs.addTab(stock_manager_tab, "Stock Manager")
+
     # Performance tab (T038)
     from app.ui.performance_tab import PerformanceTab
     performance_tab = PerformanceTab()

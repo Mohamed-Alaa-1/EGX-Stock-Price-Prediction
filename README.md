@@ -74,6 +74,18 @@ python -m src.app.main
 - View cache status and clear cached data
 - See configuration details
 
+### Stock Manager Tab
+
+- View all stocks in the universe (symbol, company name, sector)
+- **Remove** stocks by selecting rows and clicking "Remove Selected"
+- **Add** new stocks:
+  1. Enter a stock symbol (e.g., `AAPL` or `COMI.CA`)
+  2. Click "Validate with yfinance" to fetch company name automatically
+  3. Optionally edit the sector
+  4. Click "Add to Universe"
+- All changes persist immediately to `src/data/egx_stocks.csv`
+- yfinance integration ensures symbol validity before adding
+
 ## Implementation Status
 
 ✅ **All 62 tasks complete** from the EGX Price Prediction spec (100%)
