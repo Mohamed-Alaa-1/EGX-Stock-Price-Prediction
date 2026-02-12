@@ -4,6 +4,8 @@
 
 ⚠️ **DISCLAIMER**: This tool is for educational and personal use only. Not financial advice. All predictions are experimental. Use at your own risk.
 
+If the app presents an “Assistant” recommendation (e.g., Buy/Sell/Hold), it will be clearly labeled as processed guidance and visually separated from raw model outputs.
+
 ## Overview
 
 A PySide6 desktop application that trains PyTorch LSTM models on EGX stock data and generates next trading-day price predictions.

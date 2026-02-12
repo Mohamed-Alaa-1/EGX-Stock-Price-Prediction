@@ -1,0 +1,289 @@
+openapi: 3.0.3
+info:
+  title: EGX Investment Assistant (Local Contracts)
+  version: 0.1.0
+  description: |
+    Local-first internal contracts for the Investment Assistant feature.
+    This is not a public network API; it documents service boundaries and payloads.
+servers:
+  - url: http://localhost
+paths:
+  /strategy/recommendation:
+    get:
+      summary: Compute a strategy recommendation
+      parameters:
+        - in: query
+          name: symbol
+          required: true
+          schema:
+            type: string
+          description: EGX symbol (e.g., COMI)
+        - in: query
+          name: forecastMethod
+          required: false
+          schema:
+            type: string
+            enum: [ml, naive, sma]
+          description: Forecast source used as one input to the assistant
+      responses:
+        '200':
+          description: Strategy recommendation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StrategyRecommendation'
+        '400':
+          description: Bad request
+  /journal/entry:
+    post:
+      summary: Log a simulated entry based on current recommendation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalEntryRequest'
+      responses:
+        '200':
+          description: Journal entry created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeJournalEntry'
+  /journal/exit:
+    post:
+      summary: Log a simulated exit for an open position
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JournalExitRequest'
+      responses:
+        '200':
+          description: Position closed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TradeJournalEntry'
+  /performance/summary:
+    get:
+      summary: Compute performance summary from journaled trades
+      parameters:
+        - in: query
+          name: symbol
+          required: false
+          schema:
+            type: string
+          description: If provided, summarizes for one symbol only
+      responses:
+        '200':
+          description: Summary metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerformanceSummary'
+components:
+  schemas:
+    StrategyAction:
+      type: string
+      enum: [buy, sell, hold]
+
+    Regime:
+      type: string
+      enum: [trending, mean_reverting, random_like, unknown]
+
+    EvidenceSource:
+      type: string
+      enum: [ml_forecast, rsi, macd, ema, var, hurst, adf]
+
+    EvidenceDirection:
+      type: string
+      enum: [bullish, bearish, neutral]
+
+    EvidenceSignal:
+      type: object
+      required: [source, direction, weight, score, summary]
+      properties:
+        source:
+          $ref: '#/components/schemas/EvidenceSource'
+        direction:
+          $ref: '#/components/schemas/EvidenceDirection'
+        weight:
+          type: number
+          format: float
+          description: Disclosed blend weight for the source-group
+        score:
+          type: number
+          format: float
+          description: Normalized signal in [-1, +1]
+        summary:
+          type: string
+        raw_value:
+          nullable: true
+
+    PriceRange:
+      type: object
+      required: [lower, upper]
+      properties:
+        lower:
+          type: number
+          format: float
+        upper:
+          type: number
+          format: float
+
+    StrategyRecommendation:
+      type: object
+      required:
+        - symbol
+        - as_of_date
+        - action
+        - conviction
+        - regime
+        - evidence
+        - logic_summary
+      properties:
+        symbol:
+          type: string
+        as_of_date:
+          type: string
+          format: date
+        action:
+          $ref: '#/components/schemas/StrategyAction'
+        conviction:
+          type: integer
+          minimum: 0
+          maximum: 100
+        regime:
+          $ref: '#/components/schemas/Regime'
+        entry_zone:
+          allOf:
+            - $ref: '#/components/schemas/PriceRange'
+          nullable: true
+        target_exit:
+          type: number
+          format: float
+          nullable: true
+        stop_loss:
+          type: number
+          format: float
+          nullable: true
+        risk_distance_pct:
+          type: number
+          format: float
+          nullable: true
+        evidence:
+          type: object
+          required: [bullish, bearish, neutral]
+          properties:
+            bullish:
+              type: array
+              items:
+                $ref: '#/components/schemas/EvidenceSignal'
+            bearish:
+              type: array
+              items:
+                $ref: '#/components/schemas/EvidenceSignal'
+            neutral:
+              type: array
+              items:
+                $ref: '#/components/schemas/EvidenceSignal'
+        logic_summary:
+          type: string
+        raw_inputs:
+          type: object
+          nullable: true
+
+    JournalEntryRequest:
+      type: object
+      required: [symbol, side, executed_price, recommendation]
+      properties:
+        symbol:
+          type: string
+        side:
+          type: string
+          enum: [long, short]
+        executed_price:
+          type: number
+          format: float
+        recommendation:
+          $ref: '#/components/schemas/StrategyRecommendation'
+        notes:
+          type: string
+          nullable: true
+
+    JournalExitRequest:
+      type: object
+      required: [symbol, side, executed_price]
+      properties:
+        symbol:
+          type: string
+        side:
+          type: string
+          enum: [long, short]
+        executed_price:
+          type: number
+          format: float
+        notes:
+          type: string
+          nullable: true
+
+    TradeJournalEntry:
+      type: object
+      required: [id, created_at, symbol, event_type, side, price]
+      properties:
+        id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        symbol:
+          type: string
+        event_type:
+          type: string
+          enum: [entry, exit]
+        side:
+          type: string
+          enum: [long, short]
+        price:
+          type: number
+          format: float
+        recommendation_snapshot:
+          $ref: '#/components/schemas/StrategyRecommendation'
+        notes:
+          type: string
+          nullable: true
+
+    PerformanceSummary:
+      type: object
+      required: [as_of_date, closed_trade_count, open_trade_count]
+      properties:
+        as_of_date:
+          type: string
+          format: date
+        symbol:
+          type: string
+          nullable: true
+        closed_trade_count:
+          type: integer
+          minimum: 0
+        open_trade_count:
+          type: integer
+          minimum: 0
+        win_rate:
+          type: number
+          format: float
+          nullable: true
+        avg_return_pct:
+          type: number
+          format: float
+          nullable: true
+        stop_loss_hit_rate:
+          type: number
+          format: float
+          nullable: true
+        warnings:
+          type: array
+          items:
+            type: string

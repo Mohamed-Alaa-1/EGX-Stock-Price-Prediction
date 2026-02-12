@@ -1,18 +1,19 @@
 <!--
 Sync Impact Report
-- Version change: 1.0.0 → 1.1.0
+- Version change: 1.1.0 → 1.2.0
 - Modified principles:
-	- III. Minimal Prediction Scope → III. Prediction Scope + Risk & Portfolio Context
-	- IV. Reproducible and Explainable Enough → IV. Reproducible, Explainable, and Statistically Grounded
-	- V. Safety, Honesty, and Robustness → V. Safety, Honesty, Realistic Evaluation
-- Added sections: None
+	- V. Safety, Honesty, Realistic Evaluation → V. Safety, Honesty, Realistic Evaluation (expanded: recommendation/UI labeling constraints)
+- Added sections:
+	- VI. Investment Advisory Principles (Risk-First Recommendations)
 - Removed sections: None
 - Templates requiring updates:
-	- ✅ .specify/templates/plan-template.md (reviewed; no change needed)
-	- ✅ .specify/templates/spec-template.md (reviewed; no change needed)
-	- ✅ .specify/templates/tasks-template.md (reviewed; no change needed)
-	- ✅ .specify/templates/checklist-template.md (reviewed; no change needed)
+	- ✅ .specify/templates/plan-template.md
+	- ✅ .specify/templates/spec-template.md
+	- ✅ .specify/templates/tasks-template.md
+	- ✅ .specify/templates/checklist-template.md
 	- ⚠ .specify/templates/commands/*.md (directory not present in repo; nothing to update)
+- Runtime docs requiring updates:
+	- ✅ README.md (clarify raw model output vs assistant recommendation labeling expectation)
 - Follow-up TODOs: None
 -->
 
@@ -84,6 +85,11 @@ Sync Impact Report
 - Clearly label when the market is closed/open and whether the target close is already known.
 - Validate inputs (ticker format, date range) and handle missing/holiday data correctly.
 
+- When the UI presents an “Assistant” output that goes beyond raw model inference (e.g., Buy/Sell/Hold), it MUST:
+	- clearly distinguish raw model data (forecast/baselines/metrics) from the Assistant’s processed recommendation,
+	- avoid implying guaranteed outcomes, and
+	- surface key risk context prominently.
+
 - Any success criteria, backtesting, or claims of “alpha” MUST be realistic for the EGX market.
   Performance reporting MUST include transaction cost modeling at minimum for:
 	- commissions,
@@ -91,6 +97,29 @@ Sync Impact Report
 	- and any other mandatory EGX fees when known.
   Backtest results MUST report net-of-cost performance and clearly state the cost assumptions.
   Costs MUST be configurable, with documented defaults.
+
+### VI. Investment Advisory Principles (Risk-First Recommendations)
+- Capital preservation is the top priority (Risk-First). If signals conflict or risk is unclear, default to HOLD.
+
+- Any “recommendation” output (including HOLD) MUST include:
+	- a Stop-Loss field (explicitly set to “N/A (no position)” when action is HOLD),
+	- a Conviction Score, and
+	- a short evidence summary that references the underlying signals and assumptions.
+
+- Stop-Loss MUST be derived from quantitative risk context (e.g., volatility/ATR/VaR) and must be expressed as:
+	- a price level, and
+	- a % distance from the relevant reference price (e.g., last close or proposed entry).
+
+- Conviction Score MUST be defined on a stable scale (default: 0–100) and reflect agreement between signals.
+  Conviction MUST decrease when technical signals and ML predictions diverge.
+
+- Technical signals MUST be weighted against ML predictions.
+	- The system MUST compute an explicit blended view (weights disclosed) for any recommendation.
+	- Technical-only “Buy/Sell” calls without reference to the ML forecast are not allowed.
+	- If ML and technical disagree, the recommendation MUST either downgrade to HOLD or reduce conviction and tighten risk.
+
+- UI/UX MUST present raw model data and processed recommendation as separate, clearly labeled sections.
+  The user must be able to tell what the model predicted vs what the Assistant inferred.
 
 ## Constraints
 - No paid APIs, paid datasets, or mandatory accounts.
@@ -108,6 +137,7 @@ Sync Impact Report
 	- prediction pipeline determinism (when seed is set),
 	- statistical signal validation computations (ADF, Hurst),
 	- risk metric calculations (e.g., VaR) and transaction cost modeling.
+	- recommendation policy (Risk-First), signal blending (ML vs technical), and Stop-Loss/Conviction Score outputs.
 - When changing a data source or model, update any docs/notes that describe assumptions.
 
 ## Governance
@@ -120,6 +150,7 @@ Sync Impact Report
 	- PATCH: clarifications and non-semantic refinements.
 
 - Compliance expectation: feature specs/plans that touch modeling, evaluation, or new data inputs MUST explicitly
-  state how they satisfy Principles II–V (Free Data, Scope + Risk, Statistical Rigor, Realistic Evaluation).
+	state how they satisfy Principles II–VI (Free Data, Scope + Risk, Statistical Rigor, Realistic Evaluation,
+	Investment Advisory Principles).
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-10 | **Last Amended**: 2026-02-12
+**Version**: 1.2.0 | **Ratified**: 2026-02-10 | **Last Amended**: 2026-02-12

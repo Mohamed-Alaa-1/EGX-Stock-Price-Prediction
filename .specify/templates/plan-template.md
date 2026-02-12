@@ -31,7 +31,18 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+For this repository, plans MUST explicitly confirm the following gates when applicable:
+
+- Local-first, personal-use only; not financial advice; no brokerage integration.
+- Free data sources only; graceful degradation on rate limits/breakages.
+- Every prediction includes risk context (at minimum 1-day VaR with assumptions).
+
+- If the feature produces an “Assistant” recommendation (Buy/Sell/Hold):
+  - Risk-First policy (capital preservation; default HOLD on uncertainty)
+  - Stop-Loss always included (explicit N/A when HOLD)
+  - Conviction Score always included (stable scale; lowered on signal disagreement)
+  - Technical signals are explicitly weighted against ML predictions (weights disclosed)
+  - UI clearly separates raw model outputs from Assistant-processed recommendation
 
 ## Project Structure
 
