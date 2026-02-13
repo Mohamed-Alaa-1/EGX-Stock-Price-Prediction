@@ -25,10 +25,10 @@ cd src; pytest; ruff check .
 Python 3.11+ (per [pyproject.toml](../../pyproject.toml)): Follow standard conventions
 
 ## Recent Changes
+- 001-stock-sheet-insights: Added Python 3.11 (per [pyproject.toml](../../pyproject.toml))
 - 001-investment-assistant: Added Python 3.11 (per [pyproject.toml](../../pyproject.toml))
 - 001-investment-assistant: Added [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION] + [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]
 
-- 001-quant-finance-integration: Added Python 3.11+ (per [pyproject.toml](../../pyproject.toml)) + PyTorch, NumPy, Pandas, Pydantic, PySide6 (+ WebEngine)
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

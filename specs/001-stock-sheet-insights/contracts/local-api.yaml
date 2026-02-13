@@ -1,0 +1,167 @@
+openapi: 3.0.3
+info:
+  title: EGX Stock Sheet Insights (Local Contracts)
+  version: 0.1.0
+  description: |
+    Local-first internal contracts for the Stock Sheet Investment Insights feature.
+    This is not a public network API; it documents service boundaries and payloads.
+servers:
+  - url: http://localhost
+paths:
+  /sheet/insights/run:
+    post:
+      summary: Run batch training + analysis for the stock sheet
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SheetInsightsRunRequest'
+      responses:
+        '200':
+          description: Batch run result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InsightBatchRun'
+
+  /sheet/insights/stock:
+    get:
+      summary: Compute insights for a single stock (used for drill-down refresh)
+      parameters:
+        - in: query
+          name: symbol
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: forecastMethod
+          required: false
+          schema:
+            type: string
+            enum: [ml, naive, sma]
+        - in: query
+          name: forceRefresh
+          required: false
+          schema:
+            type: boolean
+          description: Attempt fresh retrieval first
+      responses:
+        '200':
+          description: Stock insight
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StockInsight'
+        '400':
+          description: Bad request
+
+components:
+  schemas:
+    ForecastMethod:
+      type: string
+      enum: [ml, naive, sma]
+
+    SheetInsightsRunRequest:
+      type: object
+      required: [forecast_method, train_models, force_refresh]
+      properties:
+        symbols:
+          type: array
+          items:
+            type: string
+          nullable: true
+          description: When omitted, run on all sheet symbols
+        forecast_method:
+          $ref: '#/components/schemas/ForecastMethod'
+        train_models:
+          type: boolean
+        force_refresh:
+          type: boolean
+
+    InsightStatus:
+      type: string
+      enum: [ok, hold_fallback, error]
+
+    StrategyAction:
+      type: string
+      enum: [buy, sell, hold]
+
+    StockInsight:
+      type: object
+      required:
+        - symbol
+        - as_of_date
+        - computed_at
+        - action
+        - conviction
+        - status
+      properties:
+        symbol:
+          type: string
+        as_of_date:
+          type: string
+          format: date
+        computed_at:
+          type: string
+          format: date-time
+        action:
+          $ref: '#/components/schemas/StrategyAction'
+        conviction:
+          type: integer
+          minimum: 0
+          maximum: 100
+        entry_zone_lower:
+          type: number
+          format: float
+          nullable: true
+        entry_zone_upper:
+          type: number
+          format: float
+          nullable: true
+        target_exit:
+          type: number
+          format: float
+          nullable: true
+        stop_loss:
+          type: number
+          format: float
+          nullable: true
+        logic_summary:
+          type: string
+          nullable: true
+        status:
+          $ref: '#/components/schemas/InsightStatus'
+        status_reason:
+          type: string
+          nullable: true
+        used_cache_fallback:
+          type: boolean
+
+    InsightBatchRun:
+      type: object
+      required: [batch_id, computed_at, request, results, summary]
+      properties:
+        batch_id:
+          type: string
+        computed_at:
+          type: string
+          format: date-time
+        request:
+          $ref: '#/components/schemas/SheetInsightsRunRequest'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/StockInsight'
+        summary:
+          type: object
+          required: [total, ok, hold_fallback, error]
+          properties:
+            total:
+              type: integer
+            ok:
+              type: integer
+            hold_fallback:
+              type: integer
+            error:
+              type: integer

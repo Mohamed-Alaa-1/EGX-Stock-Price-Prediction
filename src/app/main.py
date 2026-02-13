@@ -94,6 +94,11 @@ def main():
     training_tab = TrainingTab()
     tabs.addTab(training_tab, "Training")
     
+    # Stock Sheet Insights tab
+    from app.ui.stock_sheet_insights_tab import StockSheetInsightsTab
+    sheet_insights_tab = StockSheetInsightsTab()
+    tabs.addTab(sheet_insights_tab, "Sheet Insights")
+    
     # Settings tab
     from app.ui.settings_panel import SettingsPanel
     settings_tab = SettingsPanel()

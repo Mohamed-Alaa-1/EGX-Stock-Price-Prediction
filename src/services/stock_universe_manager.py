@@ -153,3 +153,26 @@ class StockUniverseManager:
 
         except Exception as e:
             return False, "", f"yfinance error: {str(e)}"
+
+    # ------------------------------------------------------------------
+    # Batch workflow helpers
+    # ------------------------------------------------------------------
+
+    def list_symbols(self) -> list[str]:
+        """
+        List all symbols from the stock sheet (normalized, deduplicated).
+
+        Returns:
+            List of uppercase symbols.
+        """
+        stocks = self.load_all()
+        symbols = [s.symbol.upper() for s in stocks]
+        # Deduplicate while preserving order
+        seen = set()
+        result = []
+        for sym in symbols:
+            if sym not in seen:
+                seen.add(sym)
+                result.append(sym)
+        return result
+

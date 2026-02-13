@@ -439,3 +439,72 @@ class PerformanceSummary(BaseModel):
     avg_return_pct: Optional[float] = None
     stop_loss_hit_rate: Optional[float] = None
     warnings: list[str] = Field(default_factory=list)
+
+
+# ---------------------------------------------------------------------------
+# Stock Sheet Insights (batch training + analysis)
+# ---------------------------------------------------------------------------
+
+
+class InsightStatus(str, Enum):
+    """Per-stock processing outcome."""
+    OK = "ok"
+    HOLD_FALLBACK = "hold_fallback"
+    ERROR = "error"
+
+
+class StrategyAction(str, Enum):
+    """Recommendation action."""
+    BUY = "buy"
+    SELL = "sell"
+    HOLD = "hold"
+
+
+class SheetInsightsRunRequest(BaseModel):
+    """Parameters for a batch insights run."""
+    symbols: Optional[list[str]] = Field(default=None, description="Symbols to analyze (None = all)")
+    forecast_method: str = Field(default="ml", description="Forecast method: ml, naive, sma")
+    train_models: bool = Field(default=True, description="Whether to train/update models")
+    force_refresh: bool = Field(default=True, description="Attempt fresh retrieval (no-cache)")
+
+    @field_validator("symbols")
+    @classmethod
+    def symbols_uppercase(cls, v: Optional[list[str]]) -> Optional[list[str]]:
+        """Normalize symbols to uppercase."""
+        if v is None:
+            return None
+        return [s.upper() for s in v]
+
+
+class StockInsight(BaseModel):
+    """Computed insight for one stock at a point in time."""
+    symbol: str
+    as_of_date: date
+    computed_at: datetime
+    action: StrategyAction
+    conviction: int = Field(..., ge=0, le=100, description="Conviction score 0-100")
+    stop_loss: Optional[float] = Field(default=None, gt=0, description="Stop-loss price (None = N/A)")
+    target_exit: Optional[float] = Field(default=None, gt=0, description="Target exit price (None = N/A)")
+    entry_zone_lower: Optional[float] = Field(default=None, gt=0)
+    entry_zone_upper: Optional[float] = Field(default=None, gt=0)
+    logic_summary: str = Field(default="", description="Short explanation")
+    status: InsightStatus
+    status_reason: Optional[str] = Field(default=None, description="User-readable reason when not OK")
+    used_cache_fallback: bool = Field(default=False, description="True if fresh retrieval failed")
+    raw_outputs: Optional[dict[str, Any]] = Field(default=None, description="Raw forecast + baseline + risk")
+    assistant_recommendation: Optional[dict[str, Any]] = Field(default=None, description="StrategyEngine output")
+
+    @field_validator("symbol")
+    @classmethod
+    def symbol_uppercase(cls, v: str) -> str:
+        return v.upper()
+
+
+class InsightBatchRun(BaseModel):
+    """One batch run across many symbols."""
+    batch_id: str
+    computed_at: datetime
+    request: SheetInsightsRunRequest
+    results: list[StockInsight] = Field(default_factory=list)
+    summary: dict[str, int] = Field(default_factory=dict, description="Counts: total, ok, hold_fallback, error")
+
