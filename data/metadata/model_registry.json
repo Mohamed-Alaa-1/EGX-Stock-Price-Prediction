@@ -559,5 +559,2810 @@
       "baseline_rmse": 0.0
     },
     "storage_path": "F:\\stocks-project\\data\\models\\PRMH_20260210_235639.pt"
+  },
+  "XAUUSD_20260213_210615": {
+    "artifact_id": "XAUUSD_20260213_210615",
+    "type": "per_stock",
+    "covered_symbols": [
+      "XAUUSD"
+    ],
+    "created_at": "2026-02-13T21:06:15.548652",
+    "last_trained_at": "2026-02-13T21:06:15.548655",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "GC=F"
+      },
+      "fetched_at": "2026-02-13T21:05:53.141324",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "XAUUSD",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.22683540589754,
+        "adf_pvalue": 9.763167333029922e-25,
+        "adf_used_lag": 1,
+        "adf_nobs": 250,
+        "adf_critical_values": {
+          "1%": -3.456780859712,
+          "5%": -2.8731715065600003,
+          "10%": -2.572968544
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.2915538110203185,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9820631460874149,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 61.95441818237305,
+      "model_rmse": 83.10321044921875,
+      "model_mape": 2.688232660293579,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\XAUUSD_20260213_210615.pt"
+  },
+  "ETEL_20260213_210924": {
+    "artifact_id": "ETEL_20260213_210924",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ETEL"
+    ],
+    "created_at": "2026-02-13T21:09:24.918936",
+    "last_trained_at": "2026-02-13T21:09:24.918939",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ETEL.CA"
+      },
+      "fetched_at": "2026-02-13T21:09:06.316741",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ETEL",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -12.381600577171623,
+        "adf_pvalue": 5.0147029673842245e-23,
+        "adf_used_lag": 1,
+        "adf_nobs": 250,
+        "adf_critical_values": {
+          "1%": -3.456780859712,
+          "5%": -2.8731715065600003,
+          "10%": -2.572968544
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.37200100093504895,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.949180707020439,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 1.0894980430603027,
+      "model_rmse": 1.494615077972412,
+      "model_mape": 4.494819164276123,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ETEL_20260213_210924.pt"
+  },
+  "CANA_20260213_214946": {
+    "artifact_id": "CANA_20260213_214946",
+    "type": "per_stock",
+    "covered_symbols": [
+      "CANA"
+    ],
+    "created_at": "2026-02-13T21:49:46.405872",
+    "last_trained_at": "2026-02-13T21:49:46.405875",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "CANA.CA"
+      },
+      "fetched_at": "2026-02-13T21:49:26.875115",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "CANA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.493030856156984,
+        "adf_pvalue": 3.0797167951955543e-25,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5504685195730457,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9051610773193085,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.550 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.44335323572158813,
+      "model_rmse": 0.716770589351654,
+      "model_mape": 4.046520709991455,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\CANA_20260213_214946.pt"
+  },
+  "AAGR_20260213_223406": {
+    "artifact_id": "AAGR_20260213_223406",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AAGR"
+    ],
+    "created_at": "2026-02-13T22:34:06.457626",
+    "last_trained_at": "2026-02-13T22:34:06.457630",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AAGR"
+      },
+      "fetched_at": "2026-02-13T22:33:56.272206",
+      "range_start": "2023-12-07",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2023-12-07",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AAGR",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -17.0938024174505,
+        "adf_pvalue": 7.558788419346143e-30,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5534073325224835,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9692653263385261,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.553 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.020939648151397705,
+      "model_rmse": 0.04765613004565239,
+      "model_mape": 1159.6943359375,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AAGR_20260213_223406.pt"
+  },
+  "ABUK_20260213_223426": {
+    "artifact_id": "ABUK_20260213_223426",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ABUK"
+    ],
+    "created_at": "2026-02-13T22:34:26.874699",
+    "last_trained_at": "2026-02-13T22:34:26.874702",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ABUK.CA"
+      },
+      "fetched_at": "2026-02-13T22:34:08.548614",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ABUK",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.847681968023483,
+        "adf_pvalue": 7.099532571812342e-26,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.45403605866381214,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9936646072002046,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.454 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 1.5471961498260498,
+      "model_rmse": 2.021503210067749,
+      "model_mape": 4.428176403045654,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ABUK_20260213_223426.pt"
+  },
+  "ACRO_20260213_223445": {
+    "artifact_id": "ACRO_20260213_223445",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ACRO"
+    ],
+    "created_at": "2026-02-13T22:34:45.930187",
+    "last_trained_at": "2026-02-13T22:34:45.930189",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ACRO.CA"
+      },
+      "fetched_at": "2026-02-13T22:34:29.866508",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ACRO",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.40767846568028,
+        "adf_pvalue": 8.304847895628085e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5016646163146794,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9881113608682638,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.502 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 1.5148098468780518,
+      "model_rmse": 2.472306966781616,
+      "model_mape": 4.555911540985107,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ACRO_20260213_223445.pt"
+  },
+  "ADIB_20260213_223503": {
+    "artifact_id": "ADIB_20260213_223503",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ADIB"
+    ],
+    "created_at": "2026-02-13T22:35:03.700278",
+    "last_trained_at": "2026-02-13T22:35:03.700280",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ADIB.CA"
+      },
+      "fetched_at": "2026-02-13T22:34:46.918224",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ADIB",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.973098201045206,
+        "adf_pvalue": 1.1921320646926075e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.4286345317102196,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9920162600057087,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.429 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.5304115414619446,
+      "model_rmse": 0.7637869715690613,
+      "model_mape": 2.7928943634033203,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ADIB_20260213_223503.pt"
+  },
+  "AJWA_20260213_223519": {
+    "artifact_id": "AJWA_20260213_223519",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AJWA"
+    ],
+    "created_at": "2026-02-13T22:35:19.418742",
+    "last_trained_at": "2026-02-13T22:35:19.418745",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AJWA.CA"
+      },
+      "fetched_at": "2026-02-13T22:35:08.124072",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AJWA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -5.101438930981896,
+        "adf_pvalue": 1.3925896805439568e-05,
+        "adf_used_lag": 10,
+        "adf_nobs": 241,
+        "adf_critical_values": {
+          "1%": -3.4577787098622674,
+          "5%": -2.873608704758507,
+          "10%": -2.573201765981991
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.39747076458547126,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9858020836906528,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 2.438720226287842,
+      "model_rmse": 3.4887969493865967,
+      "model_mape": 6.995939254760742,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AJWA_20260213_223519.pt"
+  },
+  "ALCN_20260213_223530": {
+    "artifact_id": "ALCN_20260213_223530",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ALCN"
+    ],
+    "created_at": "2026-02-13T22:35:30.563961",
+    "last_trained_at": "2026-02-13T22:35:30.563964",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ALCN"
+      },
+      "fetched_at": "2026-02-13T22:35:19.750909",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 2.997469164256472e-05,
+      "model_rmse": 8.201583113986999e-05,
+      "model_mape": 38.320560455322266,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ALCN_20260213_223530.pt"
+  },
+  "ALEX_20260213_223547": {
+    "artifact_id": "ALEX_20260213_223547",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ALEX"
+    ],
+    "created_at": "2026-02-13T22:35:47.713457",
+    "last_trained_at": "2026-02-13T22:35:47.713460",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ALEX"
+      },
+      "fetched_at": "2026-02-13T22:35:31.115646",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ALEX",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.961545053833003,
+        "adf_pvalue": 7.168927133190284e-29,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.47609322667081266,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.997032103805653,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.476 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.41022899746894836,
+      "model_rmse": 0.570754885673523,
+      "model_mape": 2.4608266353607178,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ALEX_20260213_223547.pt"
+  },
+  "AMER_20260213_223558": {
+    "artifact_id": "AMER_20260213_223558",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMER"
+    ],
+    "created_at": "2026-02-13T22:35:58.514686",
+    "last_trained_at": "2026-02-13T22:35:58.514689",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMER"
+      },
+      "fetched_at": "2026-02-13T22:35:53.143754",
+      "range_start": "2020-10-14",
+      "range_end": "2022-10-31"
+    },
+    "training_window_start": "2020-10-14",
+    "training_window_end": "2022-10-31",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMER",
+        "as_of_date": "2022-10-31",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.238510983137823,
+        "adf_pvalue": 5.201997395914301e-28,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5049928198395819,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9586948074410171,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.505 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.4586387276649475,
+      "model_rmse": 0.639756977558136,
+      "model_mape": 1.5905998945236206,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMER_20260213_223558.pt"
+  },
+  "AMIA_20260213_223615": {
+    "artifact_id": "AMIA_20260213_223615",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMIA"
+    ],
+    "created_at": "2026-02-13T22:36:15.714154",
+    "last_trained_at": "2026-02-13T22:36:15.714156",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMIA.CA"
+      },
+      "fetched_at": "2026-02-13T22:35:59.550371",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMIA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -17.0378696494031,
+        "adf_pvalue": 8.236557973822519e-30,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.29639309634022437,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9469043795888187,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.08223197609186172,
+      "model_rmse": 0.110629141330719,
+      "model_mape": 4.270020961761475,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMIA_20260213_223615.pt"
+  },
+  "AMOC_20260213_223631": {
+    "artifact_id": "AMOC_20260213_223631",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMOC"
+    ],
+    "created_at": "2026-02-13T22:36:31.892802",
+    "last_trained_at": "2026-02-13T22:36:31.892805",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMOC.CA"
+      },
+      "fetched_at": "2026-02-13T22:36:16.429117",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMOC",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -8.775071217225038,
+        "adf_pvalue": 2.4614389765013742e-14,
+        "adf_used_lag": 4,
+        "adf_nobs": 247,
+        "adf_critical_values": {
+          "1%": -3.457105309726321,
+          "5%": -2.873313676101283,
+          "10%": -2.5730443824681606
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.28736573956207134,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9853713839707542,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.14243748784065247,
+      "model_rmse": 0.21159033477306366,
+      "model_mape": 2.9053566455841064,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMOC_20260213_223631.pt"
+  },
+  "ARAB_20260213_223648": {
+    "artifact_id": "ARAB_20260213_223648",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ARAB"
+    ],
+    "created_at": "2026-02-13T22:36:48.146293",
+    "last_trained_at": "2026-02-13T22:36:48.146296",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ARAB.CA"
+      },
+      "fetched_at": "2026-02-13T22:36:32.852189",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ARAB",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -4.151271141058607,
+        "adf_pvalue": 0.0007958587124443,
+        "adf_used_lag": 9,
+        "adf_nobs": 242,
+        "adf_critical_values": {
+          "1%": -3.457664132155201,
+          "5%": -2.8735585105960224,
+          "10%": -2.5731749894132916
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5418146108324193,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9776693309707692,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.542 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.03538786619901657,
+      "model_rmse": 0.05981485918164253,
+      "model_mape": 6.550440311431885,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ARAB_20260213_223648.pt"
+  },
+  "ARTR_20260213_223707": {
+    "artifact_id": "ARTR_20260213_223707",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ARTR"
+    ],
+    "created_at": "2026-02-13T22:37:07.005932",
+    "last_trained_at": "2026-02-13T22:37:07.005935",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ARTR"
+      },
+      "fetched_at": "2026-02-13T22:36:51.388576",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 2.8681461117230356e-05,
+      "model_rmse": 7.286098843906075e-05,
+      "model_mape": 15.132019996643066,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ARTR_20260213_223707.pt"
+  },
+  "ASHI_20260213_223725": {
+    "artifact_id": "ASHI_20260213_223725",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ASHI"
+    ],
+    "created_at": "2026-02-13T22:37:25.810462",
+    "last_trained_at": "2026-02-13T22:37:25.810465",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ASHI"
+      },
+      "fetched_at": "2026-02-13T22:37:10.201592",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ASHI",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -16.056574397607626,
+        "adf_pvalue": 5.69868565648327e-29,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.4727462417565177,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9997756180351665,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.473 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.03663378953933716,
+      "model_rmse": 0.0624966025352478,
+      "model_mape": 212.77610778808594,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ASHI_20260213_223725.pt"
+  },
+  "ATQA_20260213_223744": {
+    "artifact_id": "ATQA_20260213_223744",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ATQA"
+    ],
+    "created_at": "2026-02-13T22:37:44.193299",
+    "last_trained_at": "2026-02-13T22:37:44.193301",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ATQA.CA"
+      },
+      "fetched_at": "2026-02-13T22:37:28.659506",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ATQA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.71154906648251,
+        "adf_pvalue": 2.8423206211041116e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5056730401541042,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9884733938566883,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.506 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.24907387793064117,
+      "model_rmse": 0.31380829215049744,
+      "model_mape": 13.580982208251953,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ATQA_20260213_223744.pt"
+  },
+  "BCDA_20260213_223801": {
+    "artifact_id": "BCDA_20260213_223801",
+    "type": "per_stock",
+    "covered_symbols": [
+      "BCDA"
+    ],
+    "created_at": "2026-02-13T22:38:01.842956",
+    "last_trained_at": "2026-02-13T22:38:01.842959",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "BCDA"
+      },
+      "fetched_at": "2026-02-13T22:37:46.011468",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "BCDA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -8.985224454664401,
+        "adf_pvalue": 7.131025233575334e-15,
+        "adf_used_lag": 4,
+        "adf_nobs": 247,
+        "adf_critical_values": {
+          "1%": -3.457105309726321,
+          "5%": -2.873313676101283,
+          "10%": -2.5730443824681606
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.2727526078875485,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9283036958172898,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 1.6014262437820435,
+      "model_rmse": 2.342047929763794,
+      "model_mape": 14.287802696228027,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\BCDA_20260213_223801.pt"
+  },
+  "BTFH_20260213_223819": {
+    "artifact_id": "BTFH_20260213_223819",
+    "type": "per_stock",
+    "covered_symbols": [
+      "BTFH"
+    ],
+    "created_at": "2026-02-13T22:38:19.381748",
+    "last_trained_at": "2026-02-13T22:38:19.381751",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "BTFH.CA"
+      },
+      "fetched_at": "2026-02-13T22:38:04.059220",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "BTFH",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.37702588874394,
+        "adf_pvalue": 3.4474320506606625e-28,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.625411786907139,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9835065534753039,
+        "hurst_regime": "trending",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.0990273579955101,
+      "model_rmse": 0.13804347813129425,
+      "model_mape": 3.8187432289123535,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\BTFH_20260213_223819.pt"
+  },
+  "CANA_20260213_223837": {
+    "artifact_id": "CANA_20260213_223837",
+    "type": "per_stock",
+    "covered_symbols": [
+      "CANA"
+    ],
+    "created_at": "2026-02-13T22:38:37.769383",
+    "last_trained_at": "2026-02-13T22:38:37.769386",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "CANA.CA"
+      },
+      "fetched_at": "2026-02-13T22:38:22.536700",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "CANA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.493030856156984,
+        "adf_pvalue": 3.0797167951955543e-25,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5504685195730457,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9051610773193085,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.550 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.6670977473258972,
+      "model_rmse": 0.9173120856285095,
+      "model_mape": 7.275634288787842,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\CANA_20260213_223837.pt"
+  },
+  "CCAP_20260213_223853": {
+    "artifact_id": "CCAP_20260213_223853",
+    "type": "per_stock",
+    "covered_symbols": [
+      "CCAP"
+    ],
+    "created_at": "2026-02-13T22:38:53.938385",
+    "last_trained_at": "2026-02-13T22:38:53.938388",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "CCAP"
+      },
+      "fetched_at": "2026-02-13T22:38:38.140646",
+      "range_start": "2020-02-03",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-02-03",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "CCAP",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -7.173804616046618,
+        "adf_pvalue": 2.760497807475071e-10,
+        "adf_used_lag": 3,
+        "adf_nobs": 248,
+        "adf_critical_values": {
+          "1%": -3.4569962781990573,
+          "5%": -2.8732659015936024,
+          "10%": -2.573018897632674
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.48794682067564643,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9775558336323841,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.488 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.36876150965690613,
+      "model_rmse": 0.4569203555583954,
+      "model_mape": 2.514126777648926,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\CCAP_20260213_223853.pt"
+  },
+  "AAGR_20260213_224022": {
+    "artifact_id": "AAGR_20260213_224022",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AAGR"
+    ],
+    "created_at": "2026-02-13T22:40:22.987943",
+    "last_trained_at": "2026-02-13T22:40:22.987946",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AAGR"
+      },
+      "fetched_at": "2026-02-13T22:40:19.273519",
+      "range_start": "2023-12-07",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2023-12-07",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AAGR",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -17.0938024174505,
+        "adf_pvalue": 7.558788419346143e-30,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5534073325224835,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9692653263385261,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.553 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.030732689425349236,
+      "model_rmse": 0.06318528950214386,
+      "model_mape": 729.5048828125,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AAGR_20260213_224022.pt"
+  },
+  "ABUK_20260213_224040": {
+    "artifact_id": "ABUK_20260213_224040",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ABUK"
+    ],
+    "created_at": "2026-02-13T22:40:40.510583",
+    "last_trained_at": "2026-02-13T22:40:40.510586",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ABUK.CA"
+      },
+      "fetched_at": "2026-02-13T22:40:24.886372",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ABUK",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.847681968023483,
+        "adf_pvalue": 7.099532571812342e-26,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.45403605866381214,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9936646072002046,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.454 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 1.225423812866211,
+      "model_rmse": 1.976553201675415,
+      "model_mape": 3.482431173324585,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ABUK_20260213_224040.pt"
+  },
+  "ACRO_20260213_224058": {
+    "artifact_id": "ACRO_20260213_224058",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ACRO"
+    ],
+    "created_at": "2026-02-13T22:40:58.972994",
+    "last_trained_at": "2026-02-13T22:40:58.972997",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ACRO.CA"
+      },
+      "fetched_at": "2026-02-13T22:40:43.519223",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ACRO",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.40767846568028,
+        "adf_pvalue": 8.304847895628085e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5016646163146794,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9881113608682638,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.502 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 1.3121166229248047,
+      "model_rmse": 2.0400242805480957,
+      "model_mape": 3.782194137573242,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ACRO_20260213_224058.pt"
+  },
+  "ADIB_20260213_224115": {
+    "artifact_id": "ADIB_20260213_224115",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ADIB"
+    ],
+    "created_at": "2026-02-13T22:41:15.763752",
+    "last_trained_at": "2026-02-13T22:41:15.763755",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ADIB.CA"
+      },
+      "fetched_at": "2026-02-13T22:40:59.989403",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ADIB",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.973098201045206,
+        "adf_pvalue": 1.1921320646926075e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.4286345317102196,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9920162600057087,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.429 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.752655029296875,
+      "model_rmse": 1.5294129848480225,
+      "model_mape": 4.403453350067139,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ADIB_20260213_224115.pt"
+  },
+  "AJWA_20260213_224136": {
+    "artifact_id": "AJWA_20260213_224136",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AJWA"
+    ],
+    "created_at": "2026-02-13T22:41:36.144761",
+    "last_trained_at": "2026-02-13T22:41:36.144764",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AJWA.CA"
+      },
+      "fetched_at": "2026-02-13T22:41:20.333864",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AJWA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -5.101438930981896,
+        "adf_pvalue": 1.3925896805439568e-05,
+        "adf_used_lag": 10,
+        "adf_nobs": 241,
+        "adf_critical_values": {
+          "1%": -3.4577787098622674,
+          "5%": -2.873608704758507,
+          "10%": -2.573201765981991
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.39747076458547126,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9858020836906528,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 1.976547360420227,
+      "model_rmse": 2.9878973960876465,
+      "model_mape": 6.962822437286377,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AJWA_20260213_224136.pt"
+  },
+  "ALCN_20260213_224152": {
+    "artifact_id": "ALCN_20260213_224152",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ALCN"
+    ],
+    "created_at": "2026-02-13T22:41:52.341789",
+    "last_trained_at": "2026-02-13T22:41:52.341791",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ALCN"
+      },
+      "fetched_at": "2026-02-13T22:41:36.424626",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 3.837631084024906e-05,
+      "model_rmse": 0.00010600416862871498,
+      "model_mape": 133.86300659179688,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ALCN_20260213_224152.pt"
+  },
+  "ALEX_20260213_224208": {
+    "artifact_id": "ALEX_20260213_224208",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ALEX"
+    ],
+    "created_at": "2026-02-13T22:42:08.725151",
+    "last_trained_at": "2026-02-13T22:42:08.725154",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ALEX"
+      },
+      "fetched_at": "2026-02-13T22:41:52.758240",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ALEX",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.961545053833003,
+        "adf_pvalue": 7.168927133190284e-29,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.47609322667081266,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.997032103805653,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.476 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.32541313767433167,
+      "model_rmse": 0.5491898655891418,
+      "model_mape": 1.915571689605713,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ALEX_20260213_224208.pt"
+  },
+  "AMER_20260213_224219": {
+    "artifact_id": "AMER_20260213_224219",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMER"
+    ],
+    "created_at": "2026-02-13T22:42:19.492664",
+    "last_trained_at": "2026-02-13T22:42:19.492667",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMER"
+      },
+      "fetched_at": "2026-02-13T22:42:14.206930",
+      "range_start": "2020-10-14",
+      "range_end": "2022-10-31"
+    },
+    "training_window_start": "2020-10-14",
+    "training_window_end": "2022-10-31",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMER",
+        "as_of_date": "2022-10-31",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.238510983137823,
+        "adf_pvalue": 5.201997395914301e-28,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5049928198395819,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9586948074410171,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.505 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.3459945321083069,
+      "model_rmse": 0.45118236541748047,
+      "model_mape": 1.1788055896759033,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMER_20260213_224219.pt"
+  },
+  "AMIA_20260213_224236": {
+    "artifact_id": "AMIA_20260213_224236",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMIA"
+    ],
+    "created_at": "2026-02-13T22:42:36.582180",
+    "last_trained_at": "2026-02-13T22:42:36.582182",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMIA.CA"
+      },
+      "fetched_at": "2026-02-13T22:42:20.479456",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMIA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -17.0378696494031,
+        "adf_pvalue": 8.236557973822519e-30,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.29639309634022437,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9469043795888187,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.10161931812763214,
+      "model_rmse": 0.14904117584228516,
+      "model_mape": 4.92728328704834,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMIA_20260213_224236.pt"
+  },
+  "AMOC_20260213_224253": {
+    "artifact_id": "AMOC_20260213_224253",
+    "type": "per_stock",
+    "covered_symbols": [
+      "AMOC"
+    ],
+    "created_at": "2026-02-13T22:42:53.537781",
+    "last_trained_at": "2026-02-13T22:42:53.537784",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "AMOC.CA"
+      },
+      "fetched_at": "2026-02-13T22:42:37.138642",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "AMOC",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -8.775071217225038,
+        "adf_pvalue": 2.4614389765013742e-14,
+        "adf_used_lag": 4,
+        "adf_nobs": 247,
+        "adf_critical_values": {
+          "1%": -3.457105309726321,
+          "5%": -2.873313676101283,
+          "10%": -2.5730443824681606
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.28736573956207134,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9853713839707542,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.1572359949350357,
+      "model_rmse": 0.24468392133712769,
+      "model_mape": 2.953061580657959,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\AMOC_20260213_224253.pt"
+  },
+  "ARAB_20260213_224310": {
+    "artifact_id": "ARAB_20260213_224310",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ARAB"
+    ],
+    "created_at": "2026-02-13T22:43:10.900758",
+    "last_trained_at": "2026-02-13T22:43:10.900761",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ARAB.CA"
+      },
+      "fetched_at": "2026-02-13T22:42:54.370610",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ARAB",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -4.151271141058607,
+        "adf_pvalue": 0.0007958587124443,
+        "adf_used_lag": 9,
+        "adf_nobs": 242,
+        "adf_critical_values": {
+          "1%": -3.457664132155201,
+          "5%": -2.8735585105960224,
+          "10%": -2.5731749894132916
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5418146108324193,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9776693309707692,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.542 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.03689499944448471,
+      "model_rmse": 0.06146838888525963,
+      "model_mape": 7.020439147949219,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ARAB_20260213_224310.pt"
+  },
+  "ARTR_20260213_224330": {
+    "artifact_id": "ARTR_20260213_224330",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ARTR"
+    ],
+    "created_at": "2026-02-13T22:43:30.889419",
+    "last_trained_at": "2026-02-13T22:43:30.889421",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ARTR"
+      },
+      "fetched_at": "2026-02-13T22:43:13.902996",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5
+    },
+    "metrics": {
+      "model_mae": 3.0937448173062876e-05,
+      "model_rmse": 7.458381151081994e-05,
+      "model_mape": 18.317838668823242,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ARTR_20260213_224330.pt"
+  },
+  "ASHI_20260213_224350": {
+    "artifact_id": "ASHI_20260213_224350",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ASHI"
+    ],
+    "created_at": "2026-02-13T22:43:50.622404",
+    "last_trained_at": "2026-02-13T22:43:50.622407",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ASHI"
+      },
+      "fetched_at": "2026-02-13T22:43:34.030060",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ASHI",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -16.056574397607626,
+        "adf_pvalue": 5.69868565648327e-29,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.4727462417565177,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9997756180351665,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.473 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.03127140551805496,
+      "model_rmse": 0.056036751717329025,
+      "model_mape": 246.94277954101562,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ASHI_20260213_224350.pt"
+  },
+  "ATQA_20260213_224409": {
+    "artifact_id": "ATQA_20260213_224409",
+    "type": "per_stock",
+    "covered_symbols": [
+      "ATQA"
+    ],
+    "created_at": "2026-02-13T22:44:09.799920",
+    "last_trained_at": "2026-02-13T22:44:09.799922",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "ATQA.CA"
+      },
+      "fetched_at": "2026-02-13T22:43:52.720253",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "ATQA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -14.71154906648251,
+        "adf_pvalue": 2.8423206211041116e-27,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5056730401541042,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9884733938566883,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.506 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.14437493681907654,
+      "model_rmse": 0.2437799572944641,
+      "model_mape": 5.705826759338379,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\ATQA_20260213_224409.pt"
+  },
+  "BCDA_20260213_224430": {
+    "artifact_id": "BCDA_20260213_224430",
+    "type": "per_stock",
+    "covered_symbols": [
+      "BCDA"
+    ],
+    "created_at": "2026-02-13T22:44:30.651315",
+    "last_trained_at": "2026-02-13T22:44:30.651319",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "BCDA"
+      },
+      "fetched_at": "2026-02-13T22:44:11.683550",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "BCDA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -8.985224454664401,
+        "adf_pvalue": 7.131025233575334e-15,
+        "adf_used_lag": 4,
+        "adf_nobs": 247,
+        "adf_critical_values": {
+          "1%": -3.457105309726321,
+          "5%": -2.873313676101283,
+          "10%": -2.5730443824681606
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.2727526078875485,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9283036958172898,
+        "hurst_regime": "mean_reverting",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 1.3445959091186523,
+      "model_rmse": 2.6034064292907715,
+      "model_mape": 8.534106254577637,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\BCDA_20260213_224430.pt"
+  },
+  "BTFH_20260213_224452": {
+    "artifact_id": "BTFH_20260213_224452",
+    "type": "per_stock",
+    "covered_symbols": [
+      "BTFH"
+    ],
+    "created_at": "2026-02-13T22:44:52.254784",
+    "last_trained_at": "2026-02-13T22:44:52.254787",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "BTFH.CA"
+      },
+      "fetched_at": "2026-02-13T22:44:33.029698",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "BTFH",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -15.37702588874394,
+        "adf_pvalue": 3.4474320506606625e-28,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.625411786907139,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9835065534753039,
+        "hurst_regime": "trending",
+        "warnings": []
+      }
+    },
+    "metrics": {
+      "model_mae": 0.1256767362356186,
+      "model_rmse": 0.23227377235889435,
+      "model_mape": 4.567368030548096,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\BTFH_20260213_224452.pt"
+  },
+  "CANA_20260213_224515": {
+    "artifact_id": "CANA_20260213_224515",
+    "type": "per_stock",
+    "covered_symbols": [
+      "CANA"
+    ],
+    "created_at": "2026-02-13T22:45:15.864245",
+    "last_trained_at": "2026-02-13T22:45:15.864248",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "CANA.CA"
+      },
+      "fetched_at": "2026-02-13T22:44:55.650706",
+      "range_start": "2020-01-02",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-01-02",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "CANA",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -13.493030856156984,
+        "adf_pvalue": 3.0797167951955543e-25,
+        "adf_used_lag": 0,
+        "adf_nobs": 251,
+        "adf_critical_values": {
+          "1%": -3.4566744514553016,
+          "5%": -2.8731248767783426,
+          "10%": -2.5729436702592023
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.5504685195730457,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9051610773193085,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.550 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.5846599340438843,
+      "model_rmse": 0.9622681736946106,
+      "model_mape": 4.511301517486572,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\CANA_20260213_224515.pt"
+  },
+  "CCAP_20260213_224534": {
+    "artifact_id": "CCAP_20260213_224534",
+    "type": "per_stock",
+    "covered_symbols": [
+      "CCAP"
+    ],
+    "created_at": "2026-02-13T22:45:34.039061",
+    "last_trained_at": "2026-02-13T22:45:34.039064",
+    "data_source": {
+      "provider": "yfinance",
+      "provider_details": {
+        "ticker_symbol": "CCAP"
+      },
+      "fetched_at": "2026-02-13T22:45:16.317587",
+      "range_start": "2020-02-03",
+      "range_end": "2026-02-12"
+    },
+    "training_window_start": "2020-02-03",
+    "training_window_end": "2026-02-12",
+    "model_version": "lstm_v1",
+    "hyperparams": {
+      "sequence_length": 30,
+      "forecast_horizon": 1,
+      "train_split": 0.8,
+      "epochs": 50,
+      "batch_size": 32,
+      "learning_rate": 0.001,
+      "hidden_size": 64,
+      "num_layers": 2,
+      "dropout": 0.2,
+      "features": [
+        "close",
+        "open",
+        "high",
+        "low",
+        "volume"
+      ],
+      "early_stopping_patience": 10,
+      "seed": null,
+      "federated_rounds": 5,
+      "local_epochs": 5,
+      "signal_validation": {
+        "symbol": "CCAP",
+        "as_of_date": "2026-02-12",
+        "lookback_days": 252,
+        "series_tested": "simple_returns",
+        "adf_statistic": -7.173804616046618,
+        "adf_pvalue": 2.760497807475071e-10,
+        "adf_used_lag": 3,
+        "adf_nobs": 248,
+        "adf_critical_values": {
+          "1%": -3.4569962781990573,
+          "5%": -2.8732659015936024,
+          "10%": -2.573018897632674
+        },
+        "adf_regression": "c",
+        "adf_autolag": "AIC",
+        "hurst": 0.48794682067564643,
+        "hurst_method": "aggvar_increments",
+        "hurst_r2": 0.9775558336323841,
+        "hurst_regime": "random_like",
+        "warnings": [
+          "Hurst exponent H=0.488 suggests random-walk-like behavior. Predictability may be limited."
+        ]
+      }
+    },
+    "metrics": {
+      "model_mae": 0.30050915479660034,
+      "model_rmse": 0.4214317798614502,
+      "model_mape": 2.0434553623199463,
+      "baseline_mae": 0.0,
+      "baseline_rmse": 0.0
+    },
+    "storage_path": "F:\\GitHub repos\\stock-prediction\\data\\models\\CCAP_20260213_224534.pt"
   }
 }
